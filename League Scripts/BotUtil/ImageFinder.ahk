@@ -4,43 +4,26 @@ SetWorkingDir % A_ScriptDir "\resources"
 ;Functions
 Test() {
     msgbox % A_WorkingDir
-    
-    ImageSearch, testX, testY, 0,0,A_ScreenWidth,A_ScreenHeight, activeLock.PNG
-        if !Errorlevel 
-            Mousemove testX, testY
-        else 
-            return
-}
 
-FindRandomizerXY(){
-    ImageSearch, randX, randY, 0,0,A_ScreenWidth,A_ScreenHeight, randomChamp.PNG
-    if !ErrorLevel
-        return [randX,randY]
 }
 
 FindPlayerXY(){
-    ImageSearch, playerHealthX, playerHealthY, 0,0,A_ScreenWidth,A_ScreenHeight, *5 playerHealthBar.PNG
+    ImageSearch, playerHealthX, playerHealthY, 0,0,A_ScreenWidth,A_ScreenHeight, *5 player-health.PNG
     if !ErrorLevel
         return [playerHealthX+.02*A_ScreenWidth,playerHealthY+.13*A_ScreenHeight]
 }
 
 FindAllyXY(){
-    ImageSearch, allyHealthX, allyHealthY, 0,0,A_ScreenWidth,A_ScreenHeight,*5 allyHealthBar.PNG
+    ImageSearch, allyHealthX, allyHealthY, 0,0,A_ScreenWidth,A_ScreenHeight,*5 ally-health.PNG
     if !ErrorLevel
         return [allyHealthX+.02*A_ScreenWidth,allyHealthY+.13*A_ScreenHeight]
 }
 
 FindEnemyXY(){
-    ImageSearch, enemyHealthX, enemyHealthY, 0,0,A_ScreenWidth,A_ScreenHeight, *5 enemyHealthBar.PNG	
+    ImageSearch, enemyHealthX, enemyHealthY, 0,0,A_ScreenWidth,A_ScreenHeight, *5 enemy-health.PNG	
     if !ErrorLevel
         return [enemyHealthX+.02*A_ScreenWidth,enemyHealthY+.13*A_ScreenHeight]
         
-}
-
-FindAttachedAlly(){
-    ImageSearch, attachedHealthX, attachedHealthY, 0,0,A_ScreenWidth,A_ScreenHeight, attachedAlly.PNG
-    if !ErrorLevel
-        return [attachedHealthX+47,attachedHealthY+135]
 }
 
 IsShopPhase(){
@@ -50,43 +33,19 @@ IsShopPhase(){
 }
 
 IsDead(){
-    ImageSearch, isDeadX, isDeadY, 0,0,A_ScreenWidth,A_ScreenHeight, *5 deathIndicator.PNG
+    ImageSearch, isDeadX, isDeadY, 0,0,A_ScreenWidth,A_ScreenHeight, *5 death-indicator.PNG
     if !ErrorLevel
         return True
 }
 
-IsPlayer50(){
-    ImageSearch, isPlayer50X, isPlayer50Y, 0,0,A_ScreenWidth,A_ScreenHeight, playerHealth50.PNG
-        if !Errorlevel
-            return True
-}
-
-IsEnemy50(){
-    ImageSearch, isEnemy50X, isEnemy50Y, 0,0,A_ScreenWidth,A_ScreenHeight, enemyHealth50.PNG
-        if !Errorlevel
-            return True
-}
-
-IsAlly50(){
-    ImageSearch, isAlly50X, isAlly50Y, 0,0,A_ScreenWidth,A_ScreenHeight, allyHealth50.PNG
-        if !Errorlevel
-            return True
-}
-
 IsPickingChamp(){
-    ImageSearch, isPickingChampX, isPickingChampY, 0,0,A_ScreenWidth,A_ScreenHeight, inactiveLock.PNG
+    ImageSearch, isPickingChampX, isPickingChampY, 0,0,A_ScreenWidth,A_ScreenHeight, inactive-lock.PNG
         if !Errorlevel
             return True
-}
-
-CanLockChamp(){
-    ImageSearch, canLockChampX, canLockChampY, 0,0,A_ScreenWidth,A_ScreenHeight, activeLock.PNG
-        if !Errorlevel
-            return [canLockChampX, canLockChampY]
 }
 
 MatchFound(){
-    ImageSearch, matchFoundX, matchFoundY, 0,0,A_ScreenWidth,A_ScreenHeight, matchFound.PNG
+    ImageSearch, matchFoundX, matchFoundY, 0,0,A_ScreenWidth,A_ScreenHeight, match-found.PNG
         if !Errorlevel
             return [matchFoundX, matchFoundY]
 }
@@ -98,7 +57,7 @@ Surrender(){
 }
 
 HasLevelUp(){
-    ImageSearch, isLeveledUpX, isLeveledUpY, 0,0,A_ScreenWidth,A_ScreenHeight, *10 levelUp.PNG
+    ImageSearch, isLeveledUpX, isLeveledUpY, 0,0,A_ScreenWidth,A_ScreenHeight, *10 level-up.PNG
     if !Errorlevel 
         return True
 }
