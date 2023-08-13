@@ -1,8 +1,11 @@
 ﻿#SingleInstance, force
+;Init
 Gui, Font, s15
 controlDict := {"Spell1":"q","Spell2":"w","Spell3":"e","Spell4":"r","Sum1":"d","Sum2":"f","AttackMove":"a","HoldToLevel":"ctrl","Shop":"p","Items":"1,2,3,5,6,7","F_keys":"F1,F2,F3,F4,F5","CenterCamera":"space"}
 defaultDict := controlDict.Clone()
 path := A_ScriptDir "\config.cfg"
+
+;Create GUI
 infile := FileOpen(path, "r")
 for control, key in controlDict {
     string := StrSplit(infile.ReadLine(), ":")[2]

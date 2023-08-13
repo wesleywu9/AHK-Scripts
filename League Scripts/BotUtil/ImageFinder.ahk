@@ -3,7 +3,8 @@ SetWorkingDir % A_ScriptDir "\resources"
 
 ;Functions
 Test() {
-    msgbox % A_WorkingDir
+    if(IsPickingChamp())
+        msgbox true
 
 }
 
@@ -27,9 +28,15 @@ FindEnemyXY(){
 }
 
 IsShopPhase(){
-    ImageSearch, isDeadX, isDeadY, 0,0,A_ScreenWidth,A_ScreenHeight, shop-phase.PNG
+    ImageSearch, isDeadX, isDeadY, 0,0,A_ScreenWidth,A_ScreenHeight, *10 shop-phase.PNG
     if !ErrorLevel
         return True
+}
+
+ExitArena(){
+    ImageSearch, ExitArenaX, ExitArenaY, 0,0,A_ScreenWidth,A_ScreenHeight, *10 arena-exit.PNG
+    if !ErrorLevel
+        Click %ExitArenaX%, %ExitArenaY%
 }
 
 IsDead(){
@@ -44,16 +51,16 @@ IsPickingChamp(){
             return True
 }
 
-MatchFound(){
-    ImageSearch, matchFoundX, matchFoundY, 0,0,A_ScreenWidth,A_ScreenHeight, match-found.PNG
+AcceptQueue(){
+    ImageSearch, AcceptQueueX, AcceptQueueY, 0,0,A_ScreenWidth,A_ScreenHeight, match-found.PNG
         if !Errorlevel
-            return [matchFoundX, matchFoundY]
+            Click %AcceptQueueX%, %AcceptQueueY%
 }
 
 Surrender(){
-    ImageSearch, surrenderX, surrenderY, 0,0,A_ScreenWidth,A_ScreenHeight, surrender.PNG
+    ImageSearch, SurrenderX, SurrenderY, 0,0,A_ScreenWidth,A_ScreenHeight, surrender.PNG
         if !Errorlevel 
-            Click %surrenderX%, %surrenderY%
+            Click %SurrenderX%, %SurrenderY%
 }
 
 HasLevelUp(){

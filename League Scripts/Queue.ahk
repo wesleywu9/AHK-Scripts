@@ -7,12 +7,7 @@ loop {
 		Sleep 20000
 	}
 	else {
-		matchFound := ImageFinder.MatchFound()
-        if matchFound {
-            Mousemove matchFound[1], matchFound[2]
-            Click Left
-            MouseMove 0, 0
-        }
+		AcceptQueue()
 		sleep 1000
 	}
 }
