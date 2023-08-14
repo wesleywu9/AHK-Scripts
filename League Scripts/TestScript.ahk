@@ -1,7 +1,7 @@
-﻿#SingleInstance, force
+#SingleInstance, force
 ;Init
 Gui, Font, s10
-controlDict := {"Spell 1":"q","Spell 2":"w","Spell 3":"e","Spell 4":"r","Sum 1":"d","Sum 2":"f","Attack Move":"a","Hold to Level":"ctrl","Shop":"p","Center camera":"space","Item slots":"1,2,3,4,5,6,7","Select Ally":"F1,F2,F3,F4,F5","Scroll Camera":"up,down,left,right"}
+controlDict := {"Spell1":"q","Spell2":"w","Spell3":"e","Spell4":"r","Sum1":"d","Sum2":"f","AttackMove":"a","HoldToLevel":"ctrl","Shop":"p","Items":"1,2,3,5,6,7","F_keys":"F1,F2,F3,F4,F5","CenterCamera":"space"}
 defaultDict := controlDict.Clone()
 path := A_ScriptDir "\config.cfg"
 
@@ -11,8 +11,8 @@ for control, key in controlDict {
     string := StrSplit(infile.ReadLine(), ":")[2]
     string := StrSplit(string, "`n")[1]
     controlDict[control] := string
-    Gui add, text, xm r1 w130, % control
-    Gui add, edit, x+m r1 w130 lowercase vEdit%A_Index%, % string
+    Gui add, text, xm r1 w100, % control
+    Gui add, edit, x+m r1 w100 lowercase vEdit%A_Index%, % string
 }
 infile.Close()
 Gui add, button, xm r1 gDefault, Default

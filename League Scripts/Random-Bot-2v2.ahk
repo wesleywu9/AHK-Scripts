@@ -5,7 +5,7 @@
 ;Constants
 LoadScript()
 global CHAMP_NAME := ""
-global ITEM_LIST := ["guardian's horn", "lucidity", "locket", "zhonyas", "sunfire", "randuin", "chemtank"]
+global ITEM_LIST := ["guardian's horn", "lucidity", "heartsteel", "ruined king", "zhonyas", "anathemas", "chemtank"]
 global MAX_ORDER := ["r", "q", "w", "e"]
 global ACTIVE_RANGE_SQR := 625 ** 2 ;for skipping unnecessary distance calculation 
 
@@ -55,8 +55,7 @@ RunGame() {
 
 RunTest() {
 	
-	if(IsPickingChamp())
-		msgbox true
+	send % SCROLL_CAM_ARR[1]
 		
 }
 

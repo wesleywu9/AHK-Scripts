@@ -2,12 +2,12 @@
 #Include BotUtil\Settings.ahk
 
 LevelUp(ByRef ORDER) {
-    Send {%HOLD_LEVEL% down}
+    Send {%HOLD_TO_LEVEL% down}
     Send % order[1]
     Send % order[2]
     Send % order[3]
     Send % order[4]
-    Send {%HOLD_LEVEL% up}
+    Send {%HOLD_TO_LEVEL% up}
     Sleep 500
 }
 

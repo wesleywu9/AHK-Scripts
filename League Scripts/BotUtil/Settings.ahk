@@ -36,9 +36,10 @@ LoadScript() {
     ;Keys in lexical order
     ATTACK_MOVE := StrSplit(keys[i++], ":")[2]
     CENTER_CAMERA := StrSplit(keys[i++], ":")[2]
-    F_KEYS_ARR := StrSplit(StrSplit(keys[i++], ":")[2], ",")
-    HOLD_LEVEL := StrSplit(keys[i++], ":")[2]
+    HOLD_TO_LEVEL := StrSplit(keys[i++], ":")[2]
     ITEM_SLOTS_ARR := StrSplit(StrSplit(keys[i++], ":")[2], ",")
+    SCROLL_CAM_ARR := StrSplit(StrSplit(keys[i++], ":")[2], ",")
+    SELECT_ALLY_ARR := StrSplit(StrSplit(keys[i++], ":")[2], ",")
     SHOP := StrSplit(keys[i++], ":")[2]
     SPELL_1 := StrSplit(keys[i++], ":")[2]
     SPELL_2 := StrSplit(keys[i++], ":")[2]
