@@ -20,11 +20,12 @@ RunGame() {
 
 	;Shop phase
 	if (IsShopPhase()) {
+		Sleep 1000
 		Send {%SHOP%}
 		Buy(ITEM_LIST)
 		Sleep 1000
 		LevelUp(MAX_ORDER) 
-		Sleep 8000
+		Sleep 5000
 	}
 
 	;Combat
