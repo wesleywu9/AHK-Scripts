@@ -1,45 +1,74 @@
-#SingleInstance, force
-;Init
-Gui, Font, s10
-controlDict := {"Spell1":"q","Spell2":"w","Spell3":"e","Spell4":"r","Sum1":"d","Sum2":"f","AttackMove":"a","HoldToLevel":"ctrl","Shop":"p","Items":"1,2,3,5,6,7","F_keys":"F1,F2,F3,F4,F5","CenterCamera":"space"}
-defaultDict := controlDict.Clone()
-path := A_ScriptDir "\config.cfg"
+#Include BotUtil\ImageFinder.ahk
+#Include BotUtil\PowerManager.ahk
+#Include BotUtil\Settings.ahk
 
-;Create GUI
-infile := FileOpen(path, "r")
-for control, key in controlDict {
-    string := StrSplit(infile.ReadLine(), ":")[2]
-    string := StrSplit(string, "`n")[1]
-    controlDict[control] := string
-    Gui add, text, xm r1 w100, % control
-    Gui add, edit, x+m r1 w100 lowercase vEdit%A_Index%, % string
+;Constants
+LoadScript()
+global CHAMP_NAME := ""
+global ITEM_LIST := ["guardian's hammer", "lucidity", "heartsteel", "ruined king", "zhonyas", "anathemas", "chemtank"]
+global MAX_ORDER := ["r", "q", "w", "e"]
+global ACTIVE_RANGE_SQR := 625 ** 2 ;for skipping unnecessary distance calculation 
+
+RunGame() {
+	if (!WinActive("League of Legends (TM) Client")) { ;Run client when not ingame
+		RunClient()
+		return
+	}
+
+	;Look for gameover
+	ExitArena()
+
+	;Shop phase
+	if (IsShopPhase()) {
+		Send {%SHOP%}
+		Buy(ITEM_LIST)
+		Sleep 1000
+		LevelUp(MAX_ORDER) 
+		Sleep 8000
+	}
+
+	;Combat
+	EnemyPosXY := FindEnemyXY()
+	if (EnemyPosXY) {
+		Mousemove EnemyPosXY[1], EnemyPosXY[2]
+		Click Right
+		EnemyDistance_SQR := (EnemyPosXY[2] - SCREEN_CENTER[2])**2 + (EnemyPosXY[1] - SCREEN_CENTER[1])**2
+		if (EnemyDistance_SQR < ACTIVE_RANGE_SQR) {
+			Send {%SPELL_4%}{%SPELL_1%}{%SPELL_2%}{%SPELL_3%}{%SUM_1%}{%SUM_2%}{%ATTACK_MOVE%}
+			Send {%CENTER_CAMERA% down}
+			Send {%CENTER_CAMERA% up}
+			Sleep 50
+			Loop % ITEM_SLOTS_ARR.Length() {
+				SlotKey := ITEM_SLOTS_ARR[A_Index]
+				Send {%SlotKey%}
+			}
+		}
+	} else { 
+		;Look for an enemy
+		Random, RandKey, 1, SCROLL_CAM_ARR.Length()
+		Key := SCROLL_CAM_ARR[RandKey]
+		Send {%Key% down}
+		Send {%ATTACK_MOVE%}
+		Sleep 100
+		Send {%Key% up}
+	}
 }
-infile.Close()
-Gui add, button, xm r1 gDefault, Default
-Gui add, button, x+m r1 gSave, Save
-Gui show, , Settings
-return
 
-GuiClose:
-ExitApp
-return
+RunTest() {
 
-Default:
-for control, key in defaultDict {
-    GuiControl Text, Edit%A_Index%, % key 
+
+
 }
+
+Numpad9::
+loop
+	RunGame()
 return
 
-Save:
-Gui Submit
-infile := FileOpen(path, "w")
-infile.Write("")
-for control, key in controlDict {
-    currentInput := "Edit" . A_Index
-    currentInput := RTrim(%currentInput%, OmitChars = ["`r`n"," ", "`r", "`n"])
-    writeLine := Format("{1}:{2}", control, currentInput)
-    infile.WriteLine(writeLine)
-}
-infile.Close()
+Numpad8::
+RunTest()
 return
+
+Del::ExitApp
+End::Reload
 

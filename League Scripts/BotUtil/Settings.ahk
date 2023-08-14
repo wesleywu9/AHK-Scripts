@@ -9,15 +9,15 @@ SetBatchLines -1
 SetMouseDelay 20
 SetKeyDelay 20
 
-;Runtime constants
+;Psuedo Constants
 global CHAMP_NAME := ""
-global CLIENT_PROCESS_NAME := ""
 global SCREEN_CENTER
 global ATTACK_MOVE
 global CENTER_CAMERA
-global F_KEYS_ARR
-global HOLD_LEVEL
+global HOLD_TO_LEVEL
 global ITEM_SLOTS_ARR
+global SCROLL_CAM_ARR
+global SELECT_ALLY_ARR
 global SHOP
 global SPELL_1
 global SPELL_2

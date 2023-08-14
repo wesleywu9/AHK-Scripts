@@ -5,7 +5,7 @@
 ;Constants
 LoadScript()
 global CHAMP_NAME := ""
-global ITEM_LIST := ["guardian's horn", "lucidity", "heartsteel", "ruined king", "zhonyas", "anathemas", "chemtank"]
+global ITEM_LIST := ["guardian's hammer", "lucidity", "heartsteel", "ruined king", "zhonyas", "anathemas", "chemtank"]
 global MAX_ORDER := ["r", "q", "w", "e"]
 global ACTIVE_RANGE_SQR := 625 ** 2 ;for skipping unnecessary distance calculation 
 
@@ -35,28 +35,29 @@ RunGame() {
 		EnemyDistance_SQR := (EnemyPosXY[2] - SCREEN_CENTER[2])**2 + (EnemyPosXY[1] - SCREEN_CENTER[1])**2
 		if (EnemyDistance_SQR < ACTIVE_RANGE_SQR) {
 			Send {%SPELL_4%}{%SPELL_1%}{%SPELL_2%}{%SPELL_3%}{%SUM_1%}{%SUM_2%}{%ATTACK_MOVE%}
-			Sleep 100
+			Send {%CENTER_CAMERA% down}
+			Send {%CENTER_CAMERA% up}
+			Sleep 50
 			Loop % ITEM_SLOTS_ARR.Length() {
 				SlotKey := ITEM_SLOTS_ARR[A_Index]
 				Send {%SlotKey%}
 			}
 		}
 	} else { 
-		;Find enemy
-		Random, rx, 0, A_ScreenWidth
-		Random, ry, 0, A_ScreenHeight
-		Mousemove rx, ry 
-		Sleep 1000
-		Click Right
-		Send {%CENTER_CAMERA% down}
-		Send {%CENTER_CAMERA% up}
+		;Look for an enemy
+		Random, RandKey, 1, SCROLL_CAM_ARR.Length()
+		Key := SCROLL_CAM_ARR[RandKey]
+		Send {%Key% down}
+		Send {%ATTACK_MOVE%}
+		Sleep 100
+		Send {%Key% up}
 	}
 }
 
 RunTest() {
-	
-	send % SCROLL_CAM_ARR[1]
-		
+
+
+
 }
 
 Numpad9::
@@ -70,3 +71,4 @@ return
 
 Del::ExitApp
 End::Reload
+
