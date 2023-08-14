@@ -57,14 +57,21 @@ RunGame() {
 RunTest() {
 
 
-
 }
 
+;run script
 Numpad9::
 loop
 	RunGame()
 return
 
+;no numpad users
+9::
+loop
+	RunGame()
+return
+
+;testing
 Numpad8::
 RunTest()
 return
