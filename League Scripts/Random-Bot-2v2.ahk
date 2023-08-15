@@ -5,7 +5,7 @@
 ;Constants
 LoadScript()
 global CHAMP_NAME := ""
-global ITEM_LIST := ["guardian's hammer", "lucidity", "heartsteel", "ruined king", "zhonyas", "anathemas", "chemtank"]
+global ITEM_LIST := ["guardian's hammer", "lucidity", "locket", "ruined king", "zhonyas", "sunfire", "chemtank"]
 global MAX_ORDER := ["r", "q", "w", "e"]
 global ACTIVE_RANGE_SQR := 625 ** 2 ;for skipping unnecessary distance calculation 
 
@@ -22,6 +22,7 @@ RunGame() {
 	if (IsShopPhase()) {
 		Sleep 1000
 		Send {%SHOP%}
+		Sleep 1000
 		Buy(ITEM_LIST)
 		Sleep 1000
 		LevelUp(MAX_ORDER) 
@@ -35,14 +36,13 @@ RunGame() {
 		Click Right
 		EnemyDistance_SQR := (EnemyPosXY[2] - SCREEN_CENTER[2])**2 + (EnemyPosXY[1] - SCREEN_CENTER[1])**2
 		if (EnemyDistance_SQR < ACTIVE_RANGE_SQR) {
-			Send {%SPELL_4%}{%SPELL_1%}{%SPELL_2%}{%SPELL_3%}{%SUM_1%}{%SUM_2%}{%ATTACK_MOVE%}
 			Send {%CENTER_CAMERA% down}
-			Send {%CENTER_CAMERA% up}
-			Sleep 50
+			Send {%SPELL_4%}{%SPELL_1%}{%SPELL_2%}{%SPELL_3%}{%SUM_1%}{%SUM_2%}{%ATTACK_MOVE%}
 			Loop % ITEM_SLOTS_ARR.Length() {
 				SlotKey := ITEM_SLOTS_ARR[A_Index]
 				Send {%SlotKey%}
 			}
+			Send {%CENTER_CAMERA% up}
 		}
 	} else { 
 		;Look for an enemy
@@ -60,23 +60,16 @@ RunTest() {
 
 }
 
-;run script
-Numpad9::
-loop
-	RunGame()
-return
-
-;no numpad users
-9::
-loop
-	RunGame()
-return
-
 ;testing
-Numpad8::
+Numpad9::
 RunTest()
 return
 
+;run script
+Home::
+loop
+	RunGame()
+return
 Del::ExitApp
 End::Reload
 

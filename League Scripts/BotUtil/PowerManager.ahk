@@ -20,6 +20,7 @@ Buy(ByRef ITEM_LIST) {
         Send % ITEM_LIST[A_Index]
         Sleep 200
         Send {Enter}
+        Sleep 200
     }
     Send {%SHOP%}
     return bought

@@ -7,7 +7,7 @@ CoordMode Mouse Window
 SendMode Event
 SetBatchLines -1
 SetMouseDelay 20
-SetKeyDelay 20
+SetKeyDelay 50
 
 ;Psuedo Constants
 global CHAMP_NAME := ""

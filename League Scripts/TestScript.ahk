@@ -60,15 +60,15 @@ RunTest() {
 
 }
 
+;testing
 Numpad9::
-loop
-	RunGame()
-return
-
-Numpad8::
 RunTest()
 return
 
+;run script
+Home::
+loop
+	RunGame()
+return
 Del::ExitApp
 End::Reload
-
