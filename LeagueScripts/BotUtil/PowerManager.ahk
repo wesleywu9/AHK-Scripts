@@ -18,7 +18,7 @@ Buy(ByRef ITEM_LIST) {
         Send ^l
         Sleep 200
         Send % ITEM_LIST[A_Index]
-        Sleep 200
+        Sleep 500
         Send {Enter}
         Sleep 200
     }

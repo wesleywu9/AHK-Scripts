@@ -53,8 +53,10 @@ IsPickingChamp(){
 
 AcceptQueue(){
     ImageSearch, AcceptQueueX, AcceptQueueY, 0,0,A_ScreenWidth,A_ScreenHeight, match-found.PNG
-        if !Errorlevel
+        if !Errorlevel {
             Click %AcceptQueueX%, %AcceptQueueY%
+            Mousemove 0,0
+        }
 }
 
 Surrender(){

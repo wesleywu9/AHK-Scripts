@@ -5,7 +5,7 @@
 ;Constants
 LoadScript()
 global CHAMP_NAME := ""
-global ITEM_LIST := ["guardian's hammer", "lucidity", "divine sunderer", "ruined king", "zhonyas", "deadmans", "chemtank"]
+global ITEM_LIST := ["guardian's hammer", "lucidity", "divine sunderer", "ruined king", "zhonyas", "dead mans", "chemtank"]
 global MAX_ORDER := ["r", "q", "w", "e"]
 global ACTIVE_RANGE_SQR := 625 ** 2 ;for skipping unnecessary distance calculation 
 
@@ -50,8 +50,10 @@ RunGame() {
 		Random, RandKey, 1, SCROLL_CAM_ARR.Length()
 		Key := SCROLL_CAM_ARR[RandKey]
 		Send {%Key% down}
-		Sleep 100
+		Sleep 200
 		Send {%Key% up}
+		Send {%CENTER_CAMERA% down}
+		Send {%CENTER_CAMERA% up}
 	}
 }
 
