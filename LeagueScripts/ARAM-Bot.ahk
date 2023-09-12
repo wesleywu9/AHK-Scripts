@@ -59,13 +59,12 @@ RunGame() {
 }
 
 RunTest() {
-
-	Test()
+	Send {%SHOP%}
 
 }
 
 ;testing
-Numpad9::
+F12::
 RunTest()
 return
 
