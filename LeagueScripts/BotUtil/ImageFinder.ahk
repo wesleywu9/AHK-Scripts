@@ -3,8 +3,9 @@ SetWorkingDir % A_ScriptDir "\resources"
 
 ;Functions
 Test() {
-    if(IsPickingChamp())
-        msgbox true
+    ImageSearch, playerHealthX, playerHealthY, 0,0,A_ScreenWidth,A_ScreenHeight, *10 death-indicator.PNG
+    if !ErrorLevel
+        msgbox found image!
 
 }
 

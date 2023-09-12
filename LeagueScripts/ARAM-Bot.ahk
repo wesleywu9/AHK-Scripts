@@ -1,92 +1,79 @@
-﻿#Include Settings.ahk
+﻿#Include BotUtil\ImageFinder.ahk
+#Include BotUtil\PowerManager.ahk
+#Include BotUtil\Settings.ahk
 
-class AramBot {
-	champName := ""
-	retreatRange := 250
-	attackRange := 600
-	allyNum := 1
+;Constants
+LoadScript()
+global CHAMP_NAME := ""
+global ITEM_LIST := ["guardian's hammer", "lucidity", "divine sunderer", "ruined king", "zhonyas", "dead mans", "chemtank"]
+global MAX_ORDER := ["r", "q", "w", "e"]
+global ACTIVE_RANGE_SQR := 300 ** 2 ;for skipping unnecessary distance calculation 
 
-	load() {
-		LevelManager := new LevelManager([spell4, spell1, spell2, spell3])
-		ItemManager := new ItemManager(["guardians horn", "locket", "warmogs", "redemption", "steelcaps", "gargoyle"])
-		ItemManager.buy()
+RunGame() {
+	if (!WinActive("League of Legends (TM) Client")) { ;Run client when not ingame
+		RunClient()
+		return
 	}
 
-	play() {
-		;Checking for unexpected
-		ImageFinder.surrender()
+	;Shop phase
+	if (IsDead()) {
+		Sleep 1000
+		Buy(ITEM_LIST)
+		Sleep 1000
+		LevelUp(MAX_ORDER) 
+		Sleep 1000
+	}
 
-		;Locates entities
-		playerPosX := ImageFinder.findPlayerXY()[1], playerPosY := ImageFinder.findPlayerXY()[2]
-		allyPosX := ImageFinder.findAllyXY()[1], allyPosY := ImageFinder.findAllyXY()[2]
-		enemyPosX := ImageFinder.findEnemyXY()[1], enemyPosY := ImageFinder.findEnemyXY()[2]
-		playerEnemyDistance := sqrt((playerPosY - enemyPosY)**2 + (playerPosX - enemyPosX)**2)
-		playerAllyDistance := sqrt((playerPosY - allyPosY)**2 + (playerPosX - allyPosX)**2)
-		enemyAllyDistance := sqrt((enemyPosY - allyPosY)**2 + (enemyPosX - allyPosX)**2)
-		Random RNG, -100, 100
-
-		;player safety
-		if (ImageFinder.isPlayer50() || !allyPosX) {
-			Mousemove playerPosX + (playerPosX - enemyPosX), playerPosY + (playerPosY - enemyPosY)
-			Click Right
-			if (enemyPosX && playerEnemyDistance < this.retreatRange) {
-				if (ImageFinder.isPlayer50()) {
-					Mousemove playerPosX + (playerPosX - enemyPosX)*100, playerPosY + (playerPosY - enemyPosY)*100
-					Click Right
-					Send {%sum1%}{%sum2%}
-					Sleep 1000
-				}		
+	;Combat
+	EnemyPosXY := FindEnemyXY()
+	if (EnemyPosXY) {
+		Mousemove EnemyPosXY[1], EnemyPosXY[2]
+		Click Right
+		Send {%CENTER_CAMERA% down}
+		EnemyDistance_SQR := (EnemyPosXY[2] - SCREEN_CENTER[2])**2 + (EnemyPosXY[1] - SCREEN_CENTER[1])**2
+		if (EnemyDistance_SQR < ACTIVE_RANGE_SQR) {
+			
+			Send {%SPELL_4%}{%SPELL_1%}{%SPELL_2%}{%SPELL_3%}{%SUM_1%}{%SUM_2%}{%ATTACK_MOVE%}
+			Loop % ITEM_SLOTS_ARR.Length() {
+				SlotKey := ITEM_SLOTS_ARR[A_Index]
+				Send {%SlotKey%}
 			}
 		}
+		Send {%CENTER_CAMERA% up}
+	} else { 
+		;follow an ally
+		Ally1 := SELECT_ALLY_ARR[1]
+		Send {%Ally1% down}
+		Click, Right
+		
+		Random, RandKey, 1, SCROLL_CAM_ARR.Length()
+		Key := SCROLL_CAM_ARR[RandKey]
+		Send {%Key% down}
+		Sleep 200
+		Send {%Key% up}
+		Send {%CENTER_CAMERA% down}
+		Send {%CENTER_CAMERA% up}
 
-		;player aggression
-		if (allyPosX && enemyPosX && playerPosX && playerEnemyDistance < this.attackRange) { 
-			Mousemove enemyPosX, enemyPosY
-			Send {%spell4%}
-			Send {%spell1%}
-			Send {%spell2%}
-			Send {%spell3%}
-			Send {%attackMove%}
-			Sleep 50
-			Mousemove allyPosX, allyPosY
-			Send {%spell4%}
-			Send {%spell1%}
-			Send {%spell2%}
-			Send {%spell3%}
-			Loop % itemSlots.Length() {
-				i += 1
-				item := itemSlots[i]
-				Send {%item%}
-			}
-		}
-
-		;follows ally
-		currentAlly := fKeys[this.allyNum]
-		Send {%currentAlly% down}
-		Mousemove RNG+A_ScreenWidth/2, RNG+A_ScreenHeight/2
-		Click right
-		Sleep 100
-		Send {%currentAlly% up}
-		if (!allyPosX && !enemyPosX) {
-			this.allyNum += 1
-			if (this.allyNum > fKeys.Length()) 
-				this.allyNum := 1
-		}
-
-		;items/levels
-		if (ImageFinder.isLeveling()) 
-			LevelManager.levelUp()	
-		if (!playerPosX)
-			if (ImageFinder.isDead())
-				test := ItemManager.buy()
+		Send {%Ally1% up}
 	}
 }
 
+RunTest() {
+
+	Test()
+
+}
+
+;testing
 Numpad9::
-msgbox Bot active
-game := new GameManager(new AramBot())
-game.run()
+RunTest()
 return
 
+;run script
+Home::
+loop
+	RunGame()
+return
 Del::ExitApp
 End::Reload
+
