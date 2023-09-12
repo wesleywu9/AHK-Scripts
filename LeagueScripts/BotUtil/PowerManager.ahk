@@ -13,7 +13,7 @@ LevelUp(ByRef ORDER) {
 
 Buy(ByRef ITEM_LIST) {
     Send {%SHOP%}
-    Sleep 200
+    Sleep 500
     Loop % ITEM_LIST.Length() {
         Send ^l
         Sleep 200
