@@ -73,7 +73,7 @@ RunClient() {
             Sleep 500
         }
     } else {
-        Mousemove 670, 850
+        Mousemove 730, 850
         Click left
         Mousemove 800, 700
         Click left
