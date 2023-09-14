@@ -17,7 +17,6 @@ RunGame() {
 
 	;Shop phase
 	if (IsDead()) {
-		Sleep 1000
 		Buy(ITEM_LIST)
 		Sleep 1000
 		LevelUp(MAX_ORDER) 
@@ -32,8 +31,8 @@ RunGame() {
 		Send {%CENTER_CAMERA% down}
 		EnemyDistance_SQR := (EnemyPosXY[2] - SCREEN_CENTER[2])**2 + (EnemyPosXY[1] - SCREEN_CENTER[1])**2
 		if (EnemyDistance_SQR < ACTIVE_RANGE_SQR) {
-			
 			Send {%SPELL_4%}{%SPELL_1%}{%SPELL_2%}{%SPELL_3%}{%SUM_1%}{%SUM_2%}{%ATTACK_MOVE%}
+			Sleep 50
 			Loop % ITEM_SLOTS_ARR.Length() {
 				SlotKey := ITEM_SLOTS_ARR[A_Index]
 				Send {%SlotKey%}
@@ -43,18 +42,15 @@ RunGame() {
 	} else { 
 		;follow an ally
 		Ally1 := SELECT_ALLY_ARR[1]
-		Send {%Ally1% down}
-		Click, Right
-		
+		Send {%Ally1%}
 		Random, RandKey, 1, SCROLL_CAM_ARR.Length()
 		Key := SCROLL_CAM_ARR[RandKey]
 		Send {%Key% down}
 		Sleep 200
 		Send {%Key% up}
+		Click Right
 		Send {%CENTER_CAMERA% down}
 		Send {%CENTER_CAMERA% up}
-
-		Send {%Ally1% up}
 	}
 }
 
