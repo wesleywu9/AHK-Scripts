@@ -41,7 +41,7 @@ ExitArena(){
 }
 
 IsDead(){
-    ImageSearch, isDeadX, isDeadY, 0,0,A_ScreenWidth,A_ScreenHeight, *10 death-indicator.PNG
+    ImageSearch, isDeadX, isDeadY, 0,0,A_ScreenWidth,A_ScreenHeight, *5 death-indicator.PNG
     if !ErrorLevel
         return True
 }
