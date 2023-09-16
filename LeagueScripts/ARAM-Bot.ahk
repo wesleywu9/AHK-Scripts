@@ -55,12 +55,12 @@ RunGame() {
 }
 
 RunTest() {
-	Send {%SHOP%}
+	Send {%CENTER_CAMERA%}
 
 }
 
 ;testing
-F12::
+1::
 RunTest()
 return
 
