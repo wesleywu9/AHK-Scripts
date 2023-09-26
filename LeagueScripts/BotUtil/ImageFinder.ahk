@@ -28,10 +28,10 @@ FindEnemyXY(){
         
 }
 
-IsShopPhase(){
-    ImageSearch, shopX, shopY, 0,0,A_ScreenWidth,A_ScreenHeight, shop-search.PNG
+ShopOpen(){
+    ImageSearch, shopX, shopY, 0,0,A_ScreenWidth,A_ScreenHeight, *10 shop-search.PNG
     if !ErrorLevel
-        return True
+        return [shopX, shopY]
 }
 
 ExitArena(){
@@ -66,9 +66,4 @@ Surrender(){
             Click %SurrenderX%, %SurrenderY%
 }
 
-HasLevelUp(){
-    ImageSearch, HasLevelUpX, HasLevelUpY, 0,0,A_ScreenWidth,A_ScreenHeight, *10 level-up.PNG
-    if !Errorlevel 
-        return True
-}
 

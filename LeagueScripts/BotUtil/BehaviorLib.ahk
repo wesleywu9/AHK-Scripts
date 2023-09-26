@@ -24,7 +24,7 @@ LevelUp(ByRef ORDER) {
 }
 
 ;Tries to buy a given list of items in order
-Buy(ByRef ITEM_LIST) {
+BuyList(ByRef ITEM_LIST) {
     Send {%SHOP%}
     Sleep 500
     Loop % ITEM_LIST.Length() {
@@ -36,5 +36,16 @@ Buy(ByRef ITEM_LIST) {
         Sleep 200
     }
     Send {%SHOP%}
-    return bought
+}
+
+BuySuggested() {
+    Send {%SHOP%}
+    Sleep 500
+    ShopIcon := ShopOpen()
+    Mousemove ShopIcon[1]+20, ShopIcon[2]-80
+    Click left
+    Mousemove ShopIcon[1]+200, ShopIcon[2]+200
+    Click Right
+    Sleep 500
+    Send {%SHOP%}
 }

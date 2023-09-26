@@ -19,11 +19,11 @@ RunGame() {
 	ExitArena()
 
 	;Shop phase
-	if (IsShopPhase()) {
+	if (ShopOpen()) {
 		Sleep 1000
 		Send {%SHOP%}
 		Sleep 1000
-		Buy(ITEM_LIST)
+		BuySuggested()
 		Sleep 1000
 		LevelUp(MAX_ORDER) 
 		Sleep 1000

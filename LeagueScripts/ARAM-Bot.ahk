@@ -7,7 +7,7 @@ LoadScript()
 global CHAMP_NAME := ""
 global ITEM_LIST := ["guardian's hammer", "lucidity", "divine sunderer", "ruined king", "zhonyas", "dead mans", "chemtank"]
 global MAX_ORDER := ["r", "q", "w", "e"]
-global ACTIVE_RANGE_SQR := 300 ** 2 ;for skipping unnecessary distance calculation 
+global ACTIVE_RANGESQR := 300 ** 2 ;for skipping unnecessary distance calculation 
 global ALLY1 := SELECT_ALLY_ARR[1]
 
 RunGame() {
@@ -22,7 +22,7 @@ RunGame() {
 
 	;Shop phase
 	if (IsDead()) {
-		Buy(ITEM_LIST)
+		BuySuggested()
 		Sleep 500
 		LevelUp(MAX_ORDER) 
 		Sleep 500
@@ -32,8 +32,8 @@ RunGame() {
 	EnemyPosXY := FindEnemyXY()
 	if (EnemyPosXY) {
 		Send {%CENTER_CAMERA% down}
-		EnemyDistance_SQR := (EnemyPosXY[2] - SCREEN_CENTER[2])**2 + (EnemyPosXY[1] - SCREEN_CENTER[1])**2
-		if (EnemyDistance_SQR < ACTIVE_RANGE_SQR) {
+		EnemyDistanceSQR := (EnemyPosXY[2] - SCREEN_CENTER[2])**2 + (EnemyPosXY[1] - SCREEN_CENTER[1])**2
+		if (EnemyDistanceSQR < ACTIVE_RANGESQR) {
 			Mousemove EnemyPosXY[1], EnemyPosXY[2]
 			Click Right
 			Sleep 100
@@ -53,7 +53,7 @@ RunGame() {
 }
 
 RunTest() {
-
+	BuySuggested()
 }
 
 ;testing
