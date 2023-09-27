@@ -5,7 +5,6 @@
 ;Constants
 LoadScript()
 global CHAMP_NAME := ""
-global ITEM_LIST := ["guardian's hammer", "lucidity", "divine sunderer", "ruined king", "zhonyas", "dead mans", "chemtank"]
 global MAX_ORDER := ["r", "q", "w", "e"]
 global ACTIVE_RANGESQR := 300 ** 2 ;for skipping unnecessary distance calculation 
 global ALLY1 := SELECT_ALLY_ARR[1]
@@ -44,11 +43,11 @@ RunGame() {
 				Send {%SlotKey%}
 			}
 		} else {
-			FollowAlly()
+			FollowAllies()
 		}
 		Send {%CENTER_CAMERA% up}
 	} else { 
-		FollowAlly()
+		FollowAllies()
 	}
 }
 

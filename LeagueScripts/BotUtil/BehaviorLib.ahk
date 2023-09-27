@@ -3,8 +3,10 @@
 
 ;Follows ally
 
-FollowAlly() {
-    Send {%ALLY1%}
+FollowAllies() {
+    Random, AllyNum, 1, 4
+    ally := SELECT_ALLY_ARR[AllyNum]
+    Send {%ally%}
     Random, randX, -300, 300
     Random, randY, -300, 300
     Mousemove SCREEN_CENTER[1], SCREEN_CENTER[2]

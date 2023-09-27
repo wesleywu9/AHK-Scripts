@@ -5,7 +5,6 @@
 ;Constants
 LoadScript()
 global CHAMP_NAME := ""
-global ITEM_LIST := ["guardian's hammer", "lucidity", "divine sunderer", "ruined king", "zhonyas", "dead mans", "chemtank"]
 global MAX_ORDER := ["r", "q", "w", "e"]
 global ACTIVE_RANGE_SQR := 625 ** 2 ;for skipping unnecessary distance calculation 
 
