@@ -2,7 +2,7 @@
 #UseHook
 #InstallKeybdHook
 
-infScroll := 60
+infScroll := 50
 
 Del::exitapp
 End::reload
@@ -18,7 +18,7 @@ Loop {
 return
 
 ;doujin
-Numpad6::
+4::
 scrollSpeed := 70
 scrollDuration := 5500
 readDuration := 1600
@@ -35,7 +35,7 @@ Send {Right}
 return
 
 ;simple turn
-Numpad3::
+5::
 readDuration := 6500
 loop {
 sleep readDuration
@@ -45,14 +45,14 @@ return
 
 ;manhwa
 
-Numpad9::
+1::
 Click, middle
 sleep 50
 Mousemove, 0, infScroll, 0, R
 return
 
 ;Jump up
-Numpad7::
+2::
 offset := 175+infScroll
 Mousemove 0, -offset, 0, R
 Sleep 350
@@ -60,7 +60,7 @@ Mousemove 0, offset, 0, R
 return
 
 ;Jump down
-Numpad8::
+3::
 offset := 125
 Mousemove 0, offset, 0, R
 Sleep 350
