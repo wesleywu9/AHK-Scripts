@@ -4,9 +4,9 @@
 
 ;Constants
 LoadScript()
-global CHAMP_NAME := ""
-global MAX_ORDER := ["r", "q", "w", "e"]
-global ACTIVE_RANGE_SQR := 625 ** 2 ;for skipping unnecessary distance calculation 
+global MAX_ORDER := ["r", "w", "q", "e"]
+global ACTIVE_RANGESQR := 300 ** 2 ;for skipping unnecessary distance calculation 
+global ALLY_NUM := SELECT_ALLY_ARR[1]
 
 RunGame() {
 	if (!WinActive("League of Legends (TM) Client")) { ;Run client when not ingame
@@ -14,56 +14,49 @@ RunGame() {
 		return
 	}
 
-	;Look for gameover
-	ExitArena()
+	;Randomness to avoid detection
+	Random, timer, 0, 10
+	Sleep timer
 
 	;Shop phase
-	if (ShopOpen()) {
-		Sleep 1000
-		Send {%SHOP%}
-		Sleep 1000
+	if (IsDead()) {
 		BuyRecommended()
-		Sleep 1000
+		Sleep 500
 		LevelUp(MAX_ORDER) 
-		Sleep 1000
+		Sleep 500
 	}
 
 	;Combat
 	EnemyPosXY := FindEnemyXY()
 	if (EnemyPosXY) {
-		Mousemove EnemyPosXY[1], EnemyPosXY[2]
-		Click Right
 		Send {%CENTER_CAMERA% down}
-		EnemyDistance_SQR := (EnemyPosXY[2] - SCREEN_CENTER[2])**2 + (EnemyPosXY[1] - SCREEN_CENTER[1])**2
-		if (EnemyDistance_SQR < ACTIVE_RANGE_SQR) {
-			
+		EnemyDistanceSQR := (EnemyPosXY[2] - SCREEN_CENTER[2])**2 + (EnemyPosXY[1] - SCREEN_CENTER[1])**2
+		if (EnemyDistanceSQR < ACTIVE_RANGESQR) {
+			Mousemove EnemyPosXY[1], EnemyPosXY[2]
+			Click Right
+			Sleep 100
 			Send {%SPELL_4%}{%SPELL_1%}{%SPELL_2%}{%SPELL_3%}{%SUM_1%}{%SUM_2%}{%ATTACK_MOVE%}
+			Sleep 50
 			Loop % ITEM_SLOTS_ARR.Length() {
 				SlotKey := ITEM_SLOTS_ARR[A_Index]
 				Send {%SlotKey%}
 			}
+		} else {
+			FollowRandom()
 		}
 		Send {%CENTER_CAMERA% up}
 	} else { 
-		;Look for an enemy
-		Random, RandKey, 1, SCROLL_CAM_ARR.Length()
-		Key := SCROLL_CAM_ARR[RandKey]
-		Send {%Key% down}
-		Sleep 200
-		Send {%Key% up}
-		Send {%CENTER_CAMERA% down}
-		Send {%CENTER_CAMERA% up}
+		FollowRandom()
 	}
 }
 
 RunTest() {
-
-
+	BuyRecommended()
 }
 
 ;testing
 1::
-RunTest()
+RunTest() 
 return
 
 ;run script

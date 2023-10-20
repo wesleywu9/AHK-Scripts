@@ -1,17 +1,21 @@
 ﻿#Include BotUtil\ImageFinder.ahk
 #Include BotUtil\Settings.ahk
 
-;Follows ally
-
-FollowAllies() {
-    Random, AllyNum, 1, 4
-    ally := SELECT_ALLY_ARR[AllyNum]
+;Follow ally
+FollowAlly(ally) {
     Send {%ally%}
     Random, randX, -300, 300
     Random, randY, -300, 300
     Mousemove SCREEN_CENTER[1], SCREEN_CENTER[2]
     Mousemove %randX%, %randY%, , R
     Click Right
+}
+
+;Follows random ally
+FollowRandom() {
+    Random, AllyNum, 1, 4
+    ally := SELECT_ALLY_ARR[AllyNum]
+    FollowAlly(ally)
 }
 
 ;Tries to level all four abilities
@@ -40,7 +44,7 @@ BuyList(ByRef ITEM_LIST) {
     Send {%SHOP%}
 }
 
-BuySuggested() {
+BuyRecommended() {
     Send {%SHOP%}
     Sleep 500
     ShopIcon := ShopOpen()

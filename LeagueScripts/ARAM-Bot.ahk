@@ -21,7 +21,7 @@ RunGame() {
 
 	;Shop phase
 	if (IsDead()) {
-		BuySuggested()
+		BuyRecommended()
 		Sleep 500
 		LevelUp(MAX_ORDER) 
 		Sleep 500
@@ -43,16 +43,16 @@ RunGame() {
 				Send {%SlotKey%}
 			}
 		} else {
-			FollowAllies()
+			FollowRandom()
 		}
 		Send {%CENTER_CAMERA% up}
 	} else { 
-		FollowAllies()
+		FollowRandom()
 	}
 }
 
 RunTest() {
-	BuySuggested()
+	BuyRecommended()
 }
 
 ;testing
