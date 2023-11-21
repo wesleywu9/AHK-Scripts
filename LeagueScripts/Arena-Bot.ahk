@@ -9,7 +9,7 @@ global MAX_ORDER := ["r", "q", "w", "e"]
 global ACTIVE_RANGE_SQR := 625 ** 2 ;for skipping unnecessary distance calculation 
 
 RunGame() {
-	if (!WinActive("League of Legends (TM) Client")) { ;Run client when not ingame
+	if (!WinActive(GAME_PROCESS)) { ;Run client when not ingame
 		RunClient()
 		return
 	}
@@ -57,8 +57,7 @@ RunGame() {
 }
 
 RunTest() {
-
-
+	BuyRecommended()
 }
 
 ;testing

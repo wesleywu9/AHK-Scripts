@@ -13,7 +13,7 @@ Loop {
     Send {z down}
     Sleep 1
     Send {z up}
-    Sleep 5000
+    Sleep 4000
 }
 return
 

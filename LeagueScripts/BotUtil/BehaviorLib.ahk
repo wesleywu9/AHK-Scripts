@@ -44,14 +44,59 @@ BuyList(ByRef ITEM_LIST) {
     Send {%SHOP%}
 }
 
+;Buys the middle recommended item
 BuyRecommended() {
     Send {%SHOP%}
     Sleep 500
     ShopIcon := ShopOpen()
-    Mousemove ShopIcon[1]+20, ShopIcon[2]-80
+    Mousemove ShopIcon[1], ShopIcon[2]
+    MoveRelativePercent(0, -5)
     Click left
-    Mousemove ShopIcon[1]+200, ShopIcon[2]+200
+    Sleep 500
+    Mousemove ShopIcon[1], ShopIcon[2]
+    MoveRelativePercent(15, 15)
     Click Right
     Sleep 500
     Send {%SHOP%}
+}
+
+;accepts queue and picks champ
+RunClient() {
+    if IsPickingChamp() {
+        while (IsPickingChamp() == True) {
+            Mousemove 960, 130
+            Click left
+            Send % CHAMP_NAME
+            Sleep 500
+            Mousemove 480, 200
+            Click left
+            Sleep 500
+            Mousemove 800, 760
+            Click Left
+            Sleep 500
+            Mousemove 960, 130
+            Click left
+            Sleep 500
+            Send ^a{Delete}
+            Sleep 500
+        }
+    } else {
+        Mousemove 730, 850
+        Click left
+        Mousemove 800, 700
+        Click left
+        Sleep 1000
+    }
+}
+
+MoveClientPercent() {
+    xFlat := A_ScreenWidth*1/100*xPercent
+    yFlat := A_ScreenHeight*1/100*yPercent
+    Mousemove xFlat, yFlat,,R
+}
+
+MoveRelativePercent(xPercent, yPercent) {
+    xFlat := A_ScreenWidth*1/100*xPercent
+    yFlat := A_ScreenHeight*1/100*yPercent
+    Mousemove xFlat, yFlat,,R
 }

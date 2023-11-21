@@ -10,6 +10,8 @@ SetMouseDelay 20
 SetKeyDelay 50
 
 ;Psuedo Constants
+global CLIENT_PROCESS := "ahk_exe LeagueClientUx.exe"
+global GAME_PROCESS := "League of Legends (TM) Client"
 global CHAMP_NAME := ""
 global SCREEN_CENTER
 global ATTACK_MOVE
@@ -50,33 +52,4 @@ LoadScript() {
 
     ;Metadata
     SCREEN_CENTER := [A_ScreenWidth/2, (A_ScreenHeight/2)-10]
-}
-
-;Functions
-RunClient() {
-    if IsPickingChamp() {
-        while (IsPickingChamp() == True) {
-            Mousemove 960, 130
-            Click left
-            Send % CHAMP_NAME
-            Sleep 500
-            Mousemove 480, 200
-            Click left
-            Sleep 500
-            Mousemove 800, 760
-            Click Left
-            Sleep 500
-            Mousemove 960, 130
-            Click left
-            Sleep 500
-            Send ^a{Delete}
-            Sleep 500
-        }
-    } else {
-        Mousemove 730, 850
-        Click left
-        Mousemove 800, 700
-        Click left
-        Sleep 1000
-    }
 }
