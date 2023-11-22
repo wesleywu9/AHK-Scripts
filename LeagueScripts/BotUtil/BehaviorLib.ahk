@@ -64,35 +64,36 @@ BuyRecommended() {
 RunClient() {
     if IsPickingChamp() {
         while (IsPickingChamp() == True) {
-            Mousemove 960, 130
+            MoveClientPercent(60,14)
             Click left
             Send % CHAMP_NAME
             Sleep 500
-            Mousemove 480, 200
+            MoveClientPercent(30,22)
             Click left
             Sleep 500
-            Mousemove 800, 760
+            MoveClientPercent(50,85)
             Click Left
             Sleep 500
-            Mousemove 960, 130
+            MoveClientPercent(60,14)
             Click left
             Sleep 500
             Send ^a{Delete}
             Sleep 500
         }
     } else {
-        Mousemove 730, 850
+        MoveClientPercent(44,95)
         Click left
-        Mousemove 800, 700
+        MoveClientPercent(50,78)
         Click left
         Sleep 1000
     }
 }
 
-MoveClientPercent() {
-    xFlat := A_ScreenWidth*1/100*xPercent
-    yFlat := A_ScreenHeight*1/100*yPercent
-    Mousemove xFlat, yFlat,,R
+MoveClientPercent(xPercent, yPercent) {
+    WinGetPos, X, Y, W, H, %CLIENT_PROCESS%
+    xFlat := W*1/100*xPercent
+    yFlat := H*1/100*yPercent
+    Mousemove xFlat, yFlat
 }
 
 MoveRelativePercent(xPercent, yPercent) {

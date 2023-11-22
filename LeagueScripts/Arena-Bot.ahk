@@ -36,7 +36,6 @@ RunGame() {
 		Send {%CENTER_CAMERA% down}
 		EnemyDistance_SQR := (EnemyPosXY[2] - SCREEN_CENTER[2])**2 + (EnemyPosXY[1] - SCREEN_CENTER[1])**2
 		if (EnemyDistance_SQR < ACTIVE_RANGE_SQR) {
-			
 			Send {%SPELL_4%}{%SPELL_1%}{%SPELL_2%}{%SPELL_3%}{%SUM_1%}{%SUM_2%}{%ATTACK_MOVE%}
 			Loop % ITEM_SLOTS_ARR.Length() {
 				SlotKey := ITEM_SLOTS_ARR[A_Index]
@@ -54,10 +53,15 @@ RunGame() {
 		Send {%CENTER_CAMERA% down}
 		Send {%CENTER_CAMERA% up}
 	}
+	Random, RandX, 1, A_ScreenWidth
+	Random, RandY, 1, A_ScreenHeight
+	Mousemove RandX, RandY
+	Click Right
 }
 
 RunTest() {
-	BuyRecommended()
+	
+	
 }
 
 ;testing
