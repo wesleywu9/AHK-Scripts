@@ -44,18 +44,17 @@ RunGame() {
 				Mousemove EnemyPosXY[1], EnemyPosXY[2]
 				ability := CAST_ORDER[A_Index]
 				Send % ability
-				Click Right
 				Sleep 10
 			}
 			Loop % ITEM_SLOTS_ARR.Length() {
 				SlotKey := ITEM_SLOTS_ARR[A_Index]
 				Send {%SlotKey%}
 			}
+			MoveChampRandom(SCREEN_CENTER[1], SCREEN_CENTER[2], 100)
 		}
 		Send {%CENTER_CAMERA% up}
 	} else if (AllyPosXY := FindAllyXY()) {
-		Mousemove AllyPosXY[1], AllyPosXY[2]
-		Click Right
+		MoveChampRandom(AllyPosXY[1], AllyPosXY[2], 100)
 		xKey := (AllyPosXY[1] < SCREEN_CENTER[1]) ? SCROLL_CAM_ARR[3] : SCROLL_CAM_ARR[4]
 		yKey := (AllyPosXY[2] < SCREEN_CENTER[2]) ? SCROLL_CAM_ARR[1] : SCROLL_CAM_ARR[2]
 		Send {%xKey% down}
@@ -63,6 +62,7 @@ RunGame() {
 		Sleep 250
 		Send {%xKey% up}
 		Send {%yKey% up}
+		MoveChampRandom(SCREEN_CENTER[1], SCREEN_CENTER[2], 100)
 	} else { 
 		;Pan screen randomly
 		Random, RandKey, 1, SCROLL_CAM_ARR.Length()
@@ -73,11 +73,6 @@ RunGame() {
 		Mousemove SCREEN_CENTER[1], SCREEN_CENTER[2]
 		Click Right
 	}
-	Offset := 100
-	Random, RandX, SCREEN_CENTER[1]-Offset, SCREEN_CENTER[1]+Offset
-	Random, RandY, SCREEN_CENTER[2]-Offset, SCREEN_CENTER[2]+Offset
-	Mousemove RandX, RandY
-	Click Right
 */
 	
 }

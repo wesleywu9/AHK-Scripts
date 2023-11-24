@@ -89,6 +89,13 @@ RunClient() {
     }
 }
 
+MoveChampRandom(x, y, offset) {
+    Random, RandX, x-offset, x+offset
+    Random, RandY, y-offset, y+offset
+    Mousemove RandX, RandY
+    Click Right
+}
+
 MoveClientPercent(xPercent, yPercent) {
     WinGetPos, X, Y, W, H, %CLIENT_PROCESS%
     xFlat := W*1/100*xPercent
