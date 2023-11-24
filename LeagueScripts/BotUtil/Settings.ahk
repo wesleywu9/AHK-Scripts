@@ -7,7 +7,7 @@ CoordMode Mouse Window
 SendMode Event
 SetBatchLines -1
 SetMouseDelay 20
-SetKeyDelay 50
+SetKeyDelay 30
 
 ;Psuedo Constants
 global CLIENT_PROCESS := "ahk_exe LeagueClientUx.exe"
