@@ -2,12 +2,19 @@
 #Include BotUtil\BehaviorLib.ahk
 #Include BotUtil\Settings.ahk
 
-;Constants
+/*-------------------------------
+         Initialization
+-------------------------------*/
+
 LoadScript()
-global CHAMP_NAME := ""
+;Constants
 global MAX_ORDER := ["r", "q", "w", "e"]
-global ACTIVE_RANGESQR := 300 ** 2 ;for skipping unnecessary distance calculation 
-global ALLY1 := SELECT_ALLY_ARR[1]
+global CAST_ORDER := [SPELL_4, SPELL_3, SPELL_2, SPELL_1, SUM_1, SUM_2]
+global ACTIVE_RANGESQR := 300 ** 2
+
+/*-------------------------------
+        Game & Client Loop
+-------------------------------*/
 
 RunGame() {
 	if (!WinActive("League of Legends (TM) Client")) { ;Run client when not ingame
@@ -28,28 +35,32 @@ RunGame() {
 	}
 
 	;Combat
-	EnemyPosXY := FindEnemyXY()
-	if (EnemyPosXY) {
+	if (EnemyPosXY := FindEnemyXY()) {
+		Mousemove EnemyPosXY[1], EnemyPosXY[2]
+		Click Right
 		Send {%CENTER_CAMERA% down}
-		EnemyDistanceSQR := (EnemyPosXY[2] - SCREEN_CENTER[2])**2 + (EnemyPosXY[1] - SCREEN_CENTER[1])**2
-		if (EnemyDistanceSQR < ACTIVE_RANGESQR) {
-			Mousemove EnemyPosXY[1], EnemyPosXY[2]
+		EnemyPosXY := FindEnemyXY()
+		EnemyDistance_SQR := (EnemyPosXY[2] - SCREEN_CENTER[2])**2 + (EnemyPosXY[1] - SCREEN_CENTER[1])**2
+		;attack enemy when in range
+		if (EnemyDistance_SQR && EnemyDistance_SQR < ACTIVE_RANGE_SQR) {
+			AttackEnemy(CAST_ORDER)
+			MoveMouseRandom(SCREEN_CENTER[1], SCREEN_CENTER[2], 100)
 			Click Right
-			Sleep 100
-			Send {%SPELL_4%}{%SPELL_1%}{%SPELL_2%}{%SPELL_3%}{%SUM_1%}{%SUM_2%}{%ATTACK_MOVE%}
-			Sleep 50
-			Loop % ITEM_SLOTS_ARR.Length() {
-				SlotKey := ITEM_SLOTS_ARR[A_Index]
-				Send {%SlotKey%}
-			}
-		} else {
-			FollowRandom()
 		}
 		Send {%CENTER_CAMERA% up}
-	} else { 
-		FollowRandom()
-	}
+	} else { ;follow random ally
+		Random, num, 1, 4
+		randomAlly := SELECT_ALLY_ARR[num]
+		FollowAlly(randomAlly)
+		MoveMouseRandom(SCREEN_CENTER[1], SCREEN_CENTER[2], 100)
+		Click Right
+	} 
+
 }
+
+/*-------------------------------
+            Execution
+-------------------------------*/
 
 RunTest() {
 	BuyRecommended()

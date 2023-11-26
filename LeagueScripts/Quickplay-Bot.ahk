@@ -2,11 +2,21 @@
 #Include BotUtil\BehaviorLib.ahk
 #Include BotUtil\Settings.ahk
 
-;Constants
+/*-------------------------------
+         Initialization
+-------------------------------*/
+
 LoadScript()
-global MAX_ORDER := ["r", "w", "q", "e"]
-global ACTIVE_RANGESQR := 300 ** 2 ;for skipping unnecessary distance calculation 
-global ALLY_NUM := SELECT_ALLY_ARR[1]
+;Constants
+global MAX_ORDER := ["r", "q", "w", "e"]
+global CAST_ORDER := [SPELL_4, SPELL_3, SPELL_2, SPELL_1]
+global ACTIVE_RANGESQR := 600 ** 2
+global DANGER_RANGESQR := 250 ** 2
+global ALLY_MAIN := SELECT_ALLY_ARR[1] ;should be bot lane ally
+
+/*-------------------------------
+        Game & Client Loop
+-------------------------------*/
 
 RunGame() {
 	if (!WinActive("League of Legends (TM) Client")) { ;Run client when not ingame
@@ -27,32 +37,33 @@ RunGame() {
 	}
 
 	;Combat
-	EnemyPosXY := FindEnemyXY()
-	if (EnemyPosXY) {
+	if (EnemyPosXY := FindEnemyXY()) {
+		;check enemy distance
 		Send {%CENTER_CAMERA% down}
 		EnemyDistanceSQR := (EnemyPosXY[2] - SCREEN_CENTER[2])**2 + (EnemyPosXY[1] - SCREEN_CENTER[1])**2
 		if (EnemyDistanceSQR < ACTIVE_RANGESQR) {
-			Mousemove EnemyPosXY[1], EnemyPosXY[2]
+			AttackEnemy(CAST_ORDER)
+			Mousemove A_ScreenWidth-EnemyPosXY[1], A_ScreenHeight-EnemyPosXY[2]
+			MouseGetPos, xMouse, yMouse
+			MoveMouseRandom(xMouse, yMouse, 100)
 			Click Right
-			Sleep 100
-			Send {%SPELL_4%}{%SPELL_1%}{%SPELL_2%}{%SPELL_3%}{%SUM_1%}{%SUM_2%}{%ATTACK_MOVE%}
-			Sleep 50
-			Loop % ITEM_SLOTS_ARR.Length() {
-				SlotKey := ITEM_SLOTS_ARR[A_Index]
-				Send {%SlotKey%}
-			}
-		} else {
-			FollowRandom()
 		}
 		Send {%CENTER_CAMERA% up}
-	} else { 
-		FollowRandom()
+	} else { ;follow bot lane ally when no enemy
+		FollowAlly(ALLY_MAIN)
+		MoveMouseRandom(SCREEN_CENTER[1], SCREEN_CENTER[2], 100)
+		Click Right
 	}
 }
 
 RunTest() {
-	BuyRecommended()
+	EnemyPosXY := FindEnemyXY()
+	Mousemove A_ScreenWidth-EnemyPosXY[1], A_ScreenHeight-EnemyPosXY[2]
 }
+
+/*-------------------------------
+            Execution
+-------------------------------*/
 
 ;testing
 1::
