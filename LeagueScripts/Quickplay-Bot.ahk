@@ -71,13 +71,11 @@ RunGame() {
 	} else { ;follow bot lane ally when no enemy
 		FollowAlly(ALLY_MAIN)
 		MoveMouseRandom(SCREEN_CENTER[1], SCREEN_CENTER[2], 200)
-		Click Right
-		Sleep 400
 	}
 	;always auto+kite
 	MoveMouseRandom(SCREEN_CENTER[1], SCREEN_CENTER[2], 100)
 	Send {%ATTACK_MOVE%}
-	Sleep 300
+	Sleep 400
 	Click Right
 }
 

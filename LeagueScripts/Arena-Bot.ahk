@@ -24,8 +24,8 @@ RunGame() {
 	if (!WinActive(GAME_PROCESS)) { ;Run client when not ingame
 		RunClient()
 		return
-	}
-
+	}	
+	
 	;Look for gameover
 	ExitArena()
 

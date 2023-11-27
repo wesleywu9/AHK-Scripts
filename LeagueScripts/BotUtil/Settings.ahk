@@ -9,15 +9,17 @@ SetBatchLines -1
 SetMouseDelay 1
 SetDefaultMouseSpeed 0
 
+
 ;Psuedo Constants
-global CLIENT_PROCESS := "ahk_exe LeagueClientUx.exe"
-global GAME_PROCESS := "League of Legends (TM) Client"
-global CHAMP_NAME := ""
+global CLIENT_PROCESS
+global GAME_PROCESS
+global CHAMP_NAME
 global SCREEN_CENTER
 global ATTACK_MOVE
 global CENTER_CAMERA
 global HOLD_TO_LEVEL
 global ITEM_SLOTS_ARR
+global RECALL
 global SCROLL_CAM_ARR
 global SELECT_ALLY_ARR
 global SHOP
@@ -40,6 +42,7 @@ LoadScript() {
     CENTER_CAMERA := StrSplit(keys[i++], ":")[2]
     HOLD_TO_LEVEL := StrSplit(keys[i++], ":")[2]
     ITEM_SLOTS_ARR := StrSplit(StrSplit(keys[i++], ":")[2], ",")
+    RECALL := StrSplit(keys[i++], ":")[2]
     SCROLL_CAM_ARR := StrSplit(StrSplit(keys[i++], ":")[2], ",")
     SELECT_ALLY_ARR := StrSplit(StrSplit(keys[i++], ":")[2], ",")
     SHOP := StrSplit(keys[i++], ":")[2]
@@ -52,4 +55,19 @@ LoadScript() {
 
     ;Metadata
     SCREEN_CENTER := [A_ScreenWidth/2, (A_ScreenHeight/2)-10]
+    CLIENT_PROCESS := "ahk_exe LeagueClientUx.exe"
+    GAME_PROCESS := "League of Legends (TM) Client"
+}
+
+PrintKeys() {
+    infile := FileOpen(A_ScriptDir "\config.cfg", "r")
+    keys := StrSplit(infile.read(), "`n")
+    infile.Close()
+
+    str := ""
+    loop % keys.Length() {
+        str .= keys[A_Index] . "`n"
+    }
+
+    msgbox % str
 }

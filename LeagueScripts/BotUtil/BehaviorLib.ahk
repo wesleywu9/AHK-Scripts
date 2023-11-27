@@ -8,12 +8,12 @@
 */
 
 ;accepts queue and picks champ
-RunClient() {
+RunClient(champName := "") {
     if IsPickingChamp() {
         while (IsPickingChamp() == True) {
             MousePercentMove(60,14)
             Click left
-            Send % CHAMP_NAME
+            Send % champName
             Sleep 500
             MousePercentMove(30,22)
             Click left
@@ -76,10 +76,10 @@ PanCameraToward(x, y) {
 }
 
 ;follow ally based on SelectAlly key
-FollowAlly(ally) {
+FollowAlly(ally, offset) {
     Send {%ally%}
-    Random, randX, -300, 300
-    Random, randY, -300, 300
+    Random, randX, -offset, offset
+    Random, randY, -offset, offset
     Mousemove SCREEN_CENTER[1], SCREEN_CENTER[2]
     Mousemove %randX%, %randY%, , R
     Click Right

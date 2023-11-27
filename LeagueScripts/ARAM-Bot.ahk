@@ -22,7 +22,7 @@ global loaded := false
 */
 
 RunGame() {
-	if (!WinActive("League of Legends (TM) Client")) { ;Run client when not ingame
+	if (!WinActive(GAME_PROCESS)) { ;Run client when not ingame
 		RunClient()
 		loaded := false
 		return

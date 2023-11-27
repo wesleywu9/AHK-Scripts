@@ -1,7 +1,7 @@
 ﻿#SingleInstance, force
 ;Init
 Gui, Font, s10
-controlDict := {"Spell 1":"q","Spell 2":"w","Spell 3":"e","Spell 4":"r","Sum 1":"d","Sum 2":"f","Attack Move":"a","Hold to Level":"ctrl","Shop":"p","Center camera":"space","Item slots":"1,2,3,4,5,6,7","Select Ally":"F2,F3,F4,F5","Scroll Camera":"up,down,left,right"}
+controlDict := {"Spell 1":"q","Spell 2":"w","Spell 3":"e","Spell 4":"r","Sum 1":"d","Sum 2":"f","Attack Move":"a","Hold to Level":"ctrl","Shop":"p","Center camera":"space","Item slots":"1,2,3,4,5,6,7","Select Ally":"F2,F3,F4,F5","Scroll Camera":"up,down,left,right","Recall":"b"}
 defaultDict := controlDict.Clone()
 path := A_ScriptDir "\config.cfg"
 
@@ -44,5 +44,6 @@ for control, key in controlDict {
     infile.WriteLine(writeLine)
 }
 infile.Close()
+ExitApp
 return
 

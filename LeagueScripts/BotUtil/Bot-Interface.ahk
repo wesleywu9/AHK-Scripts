@@ -10,7 +10,6 @@
 
 LoadScript()
 ;Constants
-global CHAMP_NAME := ""
 global MAX_ORDER := []
 global CAST_ORDER := []
 global ACTIVE_RANGE := 0 ** 2 ;squared to shortcut calculations
@@ -22,31 +21,38 @@ global ACTIVE_RANGE := 0 ** 2 ;squared to shortcut calculations
 */
 
 RunGame() {
-	if (!WinActive("League of Legends (TM) Client")) { ;Run client when not ingame
-		RunClient()
+	if (!WinActive(GAME_PROCESS)) { ;Run client when not ingame
+		RunClient("")
 		return
 	}
 
-	;Shop phase
+	; Shop/level
 	if () {
 		BuyRecommended()
 		LevelUp(MAX_ORDER) 
 	}
 
-	;Combat
-	if (EnemyPosXY := FindEnemyXY()) {
-		Send {%CENTER_CAMERA% down}
-		EnemyPosXY := FindEnemyXY()
-		EnemyDistance := (EnemyPosXY[2] - SCREEN_CENTER[2])**2 + (EnemyPosXY[1] - SCREEN_CENTER[1])**2
-		if (EnemyDistance) {
-			if (EnemyDistance < ACTIVE_RANGE) {
-				
-			}
+	; Check ally and enemy presence
+	Send {%ALLY_MAIN%}
+	AllyPosXY := FindAllyXY()
+	EnemyPosXY := FindEnemyXY()
+	if (AllyPosXY) {
+		if (EnemyPosXY) {
+			; Ally and Enemy present
+
+		} else {
+			; only Ally present
+			
 		}
-		Send {%CENTER_CAMERA% up}
 	} else {
-		
-	} 
+		if (EnemyPosXY) {
+			; only Enemy present
+
+		} else {
+			; neither Ally nor Enemy present
+			
+		}
+	}
 
 }
 

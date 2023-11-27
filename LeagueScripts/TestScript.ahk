@@ -15,7 +15,6 @@ global CAST_ORDER := [SPELL_4, SPELL_3, SPELL_2, SPELL_1]
 global ACTIVE_RANGE := 650 ** 2 ;squared to shortcut calculations
 global DANGER_RANGE := 350 ** 2 ;squared to shortcut calculations
 global ALLY_MAIN := SELECT_ALLY_ARR[4] ;should be bot lane ally
-global loaded := false
 
 /*
 -------------------------------
@@ -24,9 +23,9 @@ global loaded := false
 */
 
 RunGame() {
-	if (!WinActive("League of Legends (TM) Client")) { ;Run client when not ingame
+	if (!WinActive(GAME_PROCESS)) { ;Run client when not ingame
 		RunClient()
-		loaded := false
+		static loaded := false
 		return
 	} else if (loaded == false) {
 		while(!FindPlayerXY()) {
@@ -46,45 +45,34 @@ RunGame() {
 		LevelUp(MAX_ORDER) 
 	}
 
-	;Combat
-	if (EnemyPosXY := FindEnemyXY()) {
-		;check enemy distance
-		Send {%CENTER_CAMERA% down}
-		Sleep 10
-		EnemyPosXY := FindEnemyXY()
-		if (EnemyPosXY) { 
-			EnemyDistance := (EnemyPosXY[2] - SCREEN_CENTER[2])**2 + (EnemyPosXY[1] - SCREEN_CENTER[1])**2
-			awayX := SCREEN_CENTER[1] + ((SCREEN_CENTER[1]-EnemyPosXY[1]) << 3)
-			awayY := SCREEN_CENTER[2] + ((SCREEN_CENTER[2]-EnemyPosXY[2]) << 3)
-			if (EnemyDistance < DANGER_RANGE) {
-				Mousemove awayX, awayY
-				Click Right
-				Send {%SUM_1%}{%SUM_2%}
-			} else if (EnemyDistance < ACTIVE_RANGE) {
-				AttackEnemy(CAST_ORDER)
-				Mousemove awayX, awayY
-				Click Right
-				Sleep 200
-			}
+	; check ally and enemy presence
+	Send {%ALLY_MAIN%}
+	AllyPosXY := FindAllyXY()
+	EnemyPosXY := FindEnemyXY()
+	if (AllyPosXY) {
+		if (EnemyPosXY) {
+			; Ally and Enemy present
+
+		} else {
+			; only Ally present
+			FollowAlly(ALLY_MAIN, 250)
 		}
-		Send {%CENTER_CAMERA% up}
-	} else { ;follow bot lane ally when no enemy
-		FollowAlly(ALLY_MAIN)
-		MoveMouseRandom(SCREEN_CENTER[1], SCREEN_CENTER[2], 200)
-		Click Right
-		Sleep 400
+	} else {
+		if (EnemyPosXY) {
+			; only Enemy present
+
+		} else {
+			; neither Ally nor Enemy present
+			Send {%RECALL%}
+		}
 	}
-	;always auto+kite
-	MoveMouseRandom(SCREEN_CENTER[1], SCREEN_CENTER[2], 100)
-	Send {%ATTACK_MOVE%}
-	Sleep 250
-	Click Right
+
 }
 
 RunTest() {
 	StartTime := A_TickCount
 
-	
+	PrintKeys()
 
 	;MsgBox % A_TickCount - StartTime " milliseconds have elapsed."
 }
