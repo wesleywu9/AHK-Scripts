@@ -1,68 +1,103 @@
 #Include BotUtil\ImageFinder.ahk
-#Include BotUtil\PowerManager.ahk
+#Include BotUtil\BehaviorLib.ahk
 #Include BotUtil\Settings.ahk
 
-;Constants
+/*
+-------------------------------
+        Initialization
+-------------------------------
+*/
+
 LoadScript()
-global CHAMP_NAME := ""
-global ITEM_LIST := ["guardian's hammer", "lucidity", "heartsteel", "ruined king", "zhonyas", "anathemas", "chemtank"]
+;Constants
 global MAX_ORDER := ["r", "q", "w", "e"]
-global ACTIVE_RANGE_SQR := 625 ** 2 ;for skipping unnecessary distance calculation 
+global CAST_ORDER := [SPELL_4, SPELL_3, SPELL_2, SPELL_1]
+global ACTIVE_RANGE := 650 ** 2 ;squared to shortcut calculations
+global DANGER_RANGE := 350 ** 2 ;squared to shortcut calculations
+global ALLY_MAIN := SELECT_ALLY_ARR[4] ;should be bot lane ally
+global loaded := false
+
+/*
+-------------------------------
+      Game & Client Loop
+-------------------------------
+*/
 
 RunGame() {
 	if (!WinActive("League of Legends (TM) Client")) { ;Run client when not ingame
 		RunClient()
+		loaded := false
 		return
-	}
+	} else if (loaded == false) {
+		while(!FindPlayerXY()) {
+			Sleep 1000
+		}
+		loaded := True
+		BuyRecommended()
+		LevelUpSingle(MAX_ORDER[4])
+	}	
 
 	;Look for gameover
 	ExitArena()
 
 	;Shop phase
-	if (IsShopPhase()) {
-		Send {%SHOP%}
-		Buy(ITEM_LIST)
-		Sleep 1000
+	if (IsDead()) {
+		BuyRecommended()
 		LevelUp(MAX_ORDER) 
-		Sleep 8000
 	}
 
 	;Combat
-	EnemyPosXY := FindEnemyXY()
-	if (EnemyPosXY) {
-		Mousemove EnemyPosXY[1], EnemyPosXY[2]
-		Click Right
-		EnemyDistance_SQR := (EnemyPosXY[2] - SCREEN_CENTER[2])**2 + (EnemyPosXY[1] - SCREEN_CENTER[1])**2
-		if (EnemyDistance_SQR < ACTIVE_RANGE_SQR) {
-			Send {%SPELL_4%}{%SPELL_1%}{%SPELL_2%}{%SPELL_3%}{%SUM_1%}{%SUM_2%}{%ATTACK_MOVE%}
-			Send {%CENTER_CAMERA% down}
-			Send {%CENTER_CAMERA% up}
-			Sleep 50
-			Loop % ITEM_SLOTS_ARR.Length() {
-				SlotKey := ITEM_SLOTS_ARR[A_Index]
-				Send {%SlotKey%}
+	if (EnemyPosXY := FindEnemyXY()) {
+		;check enemy distance
+		Send {%CENTER_CAMERA% down}
+		Sleep 10
+		EnemyPosXY := FindEnemyXY()
+		if (EnemyPosXY) { 
+			EnemyDistance := (EnemyPosXY[2] - SCREEN_CENTER[2])**2 + (EnemyPosXY[1] - SCREEN_CENTER[1])**2
+			awayX := SCREEN_CENTER[1] + ((SCREEN_CENTER[1]-EnemyPosXY[1]) << 3)
+			awayY := SCREEN_CENTER[2] + ((SCREEN_CENTER[2]-EnemyPosXY[2]) << 3)
+			if (EnemyDistance < DANGER_RANGE) {
+				Mousemove awayX, awayY
+				Click Right
+				Send {%SUM_1%}{%SUM_2%}
+			} else if (EnemyDistance < ACTIVE_RANGE) {
+				AttackEnemy(CAST_ORDER)
+				Mousemove awayX, awayY
+				Click Right
+				Sleep 200
 			}
 		}
-	} else { 
-		;Look for an enemy
-		Random, RandKey, 1, SCROLL_CAM_ARR.Length()
-		Key := SCROLL_CAM_ARR[RandKey]
-		Send {%Key% down}
-		Send {%ATTACK_MOVE%}
-		Sleep 100
-		Send {%Key% up}
+		Send {%CENTER_CAMERA% up}
+	} else { ;follow bot lane ally when no enemy
+		FollowAlly(ALLY_MAIN)
+		MoveMouseRandom(SCREEN_CENTER[1], SCREEN_CENTER[2], 200)
+		Click Right
+		Sleep 400
 	}
+	;always auto+kite
+	MoveMouseRandom(SCREEN_CENTER[1], SCREEN_CENTER[2], 100)
+	Send {%ATTACK_MOVE%}
+	Sleep 250
+	Click Right
 }
 
 RunTest() {
+	StartTime := A_TickCount
 
+	
 
-
+	;MsgBox % A_TickCount - StartTime " milliseconds have elapsed."
 }
 
+/*
+-------------------------------
+          Execution
+-------------------------------
+*/
+
 ;testing
-Numpad9::
-RunTest()
+1::
+RunTest() 
 return
 
 ;run script
@@ -72,3 +107,4 @@ loop
 return
 Del::ExitApp
 End::Reload
+

@@ -2,19 +2,23 @@
 #Include BotUtil\BehaviorLib.ahk
 #Include BotUtil\Settings.ahk
 
-/*-------------------------------
-         Initialization
--------------------------------*/
+/*
+-------------------------------
+        Initialization
+-------------------------------
+*/
 
 LoadScript()
 ;Constants
 global MAX_ORDER := ["r", "q", "w", "e"]
-global CAST_ORDER := [SPELL_4, SPELL_3, SPELL_2, SPELL_1, SUM_1, SUM_2]
-global ACTIVE_RANGE_SQR := 615 ** 2
+global CAST_ORDER := [SUM_1, SUM_2, SPELL_4, SPELL_3, SPELL_2, SPELL_1]
+global ACTIVE_RANGE := 615 ** 2 ;squared to shortcut calculations
 
-/*-------------------------------
-        Game & Client Loop
--------------------------------*/
+/*
+-------------------------------
+      Game & Client Loop
+-------------------------------
+*/
 
 RunGame() {
 	if (!WinActive(GAME_PROCESS)) { ;Run client when not ingame
@@ -30,12 +34,8 @@ RunGame() {
 			Sleep 1000
 			Send {%SHOP%}
 			Sleep 1000
-			loop 2 {
-				BuyRecommended()
-				Sleep 1000
-				LevelUp(MAX_ORDER) 
-				Sleep 1000
-			}
+			BuyRecommended()
+			LevelUp(MAX_ORDER) 
 	}
 
 	;Combat
@@ -45,12 +45,14 @@ RunGame() {
 		Click Right
 		Send {%CENTER_CAMERA% down}
 		EnemyPosXY := FindEnemyXY()
-		EnemyDistance_SQR := (EnemyPosXY[2] - SCREEN_CENTER[2])**2 + (EnemyPosXY[1] - SCREEN_CENTER[1])**2
+		EnemyDistance := (EnemyPosXY[2] - SCREEN_CENTER[2])**2 + (EnemyPosXY[1] - SCREEN_CENTER[1])**2
 		;attack enemy when in range
-		if (EnemyDistance_SQR && EnemyDistance_SQR < ACTIVE_RANGE_SQR) {
-			AttackEnemy(CAST_ORDER)
-			MoveMouseRandom(SCREEN_CENTER[1], SCREEN_CENTER[2], 100)
-			Click Right
+		if (EnemyDistance) {
+			if (EnemyDistance < ACTIVE_RANGE) {
+				AttackEnemy(CAST_ORDER)
+				MoveMouseRandom(SCREEN_CENTER[1], SCREEN_CENTER[2], 100)
+				Click Right
+			}
 		}
 		Send {%CENTER_CAMERA% up}
 	} else if (AllyPosXY := FindAllyXY()) { ;pan and move toward ally
@@ -68,9 +70,11 @@ RunGame() {
 	}
 }
 
-/*-------------------------------
-            Execution
--------------------------------*/
+/*
+-------------------------------
+          Execution
+-------------------------------
+*/
 
 RunTest() {
 	

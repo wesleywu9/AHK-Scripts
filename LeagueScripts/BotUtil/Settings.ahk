@@ -6,8 +6,8 @@ CoordMode Pixel Window
 CoordMode Mouse Window
 SendMode Event
 SetBatchLines -1
-SetMouseDelay 20
-SetKeyDelay 30
+SetMouseDelay 1
+SetDefaultMouseSpeed 0
 
 ;Psuedo Constants
 global CLIENT_PROCESS := "ahk_exe LeagueClientUx.exe"

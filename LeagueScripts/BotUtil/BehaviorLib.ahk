@@ -1,9 +1,11 @@
 ﻿#Include BotUtil\ImageFinder.ahk
 #Include BotUtil\Settings.ahk
 
-/*-------------------------------
+/*
+-------------------------------
             Client
--------------------------------*/
+-------------------------------
+*/
 
 ;accepts queue and picks champ
 RunClient() {
@@ -28,7 +30,7 @@ RunClient() {
     } else {
         MousePercentMove(44,95)
         Click left
-        MousePercentMove(50,78)
+        MousePercentMove(51,78)
         Click left
         Sleep 1000
     }
@@ -42,9 +44,11 @@ MousePercentMove(xPercent, yPercent) {
     Mousemove xFlat, yFlat
 }
 
-/*-------------------------------
+/*
+-------------------------------
             Ingame
--------------------------------*/
+-------------------------------
+*/
 
 ;move mouse % window distance from current pos
 MouseRelativeMove(xPercent, yPercent) {
@@ -82,12 +86,20 @@ FollowAlly(ally) {
 }
 
 ;level all four abilities
-LevelUp(ByRef ORDER) {
+LevelUp(ByRef MAX_ORDER) {
     Send {%HOLD_TO_LEVEL% down}
-    Send % order[1]
-    Send % order[2]
-    Send % order[3]
-    Send % order[4]
+    Send % MAX_ORDER[1]
+    Send % MAX_ORDER[2]
+    Send % MAX_ORDER[3]
+    Send % MAX_ORDER[4]
+    Send {%HOLD_TO_LEVEL% up}
+    Sleep 500
+}
+
+;level the given ability
+LevelUpSingle(spell) {
+    Send {%HOLD_TO_LEVEL% down}
+    Send % spell
     Send {%HOLD_TO_LEVEL% up}
     Sleep 500
 }
@@ -105,6 +117,7 @@ BuyList(ByRef ITEM_LIST) {
         Sleep 200
     }
     Send {%SHOP%}
+    Sleep 500
 }
 
 ;buy the middle recommended item
@@ -117,21 +130,25 @@ BuyRecommended() {
     Click left
     Sleep 500
     Mousemove ShopIcon[1], ShopIcon[2]
-    MouseRelativeMove(15, 15)
-    Click Right
+    MouseRelativeMove(14, 15)
+    loop 5 {
+        Click Right
+        Sleep 100
+    }
     Sleep 500
     Send {%SHOP%}
+    Sleep 500
 }
 
 ;attack enemy based on cast order
 AttackEnemy(ByRef CAST_ORDER) {
+    Send {%ATTACK_MOVE%}
     loop % CAST_ORDER.Length() {
         EnemyPosXY := FindEnemyXY()
         Mousemove EnemyPosXY[1], EnemyPosXY[2]
         ability := CAST_ORDER[A_Index]
         Send % ability
-        Send {%ATTACK_MOVE%}
-        Sleep 10
+        Sleep 50
     }
     Loop % ITEM_SLOTS_ARR.Length() {
         SlotKey := ITEM_SLOTS_ARR[A_Index]

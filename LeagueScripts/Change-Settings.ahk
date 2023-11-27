@@ -5,6 +5,9 @@ controlDict := {"Spell 1":"q","Spell 2":"w","Spell 3":"e","Spell 4":"r","Sum 1":
 defaultDict := controlDict.Clone()
 path := A_ScriptDir "\config.cfg"
 
+;Notes
+Gui add, text,, Make sure camera lock is dead center. `nOptions > Game > Camera Lock Mode > Fixed Offset`n
+
 ;Create GUI
 infile := FileOpen(path, "r")
 for control, key in controlDict {

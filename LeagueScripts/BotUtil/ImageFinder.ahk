@@ -2,11 +2,10 @@
 SetWorkingDir % A_ScriptDir "\resources"
 
 ;Functions
-Test() {
-    ImageSearch, playerHealthX, playerHealthY, 0,0,A_ScreenWidth,A_ScreenHeight, *10 death-indicator.PNG
+TestImageFinder() {
+    PixelSearch, recallX, recallY, 0,0,A_ScreenWidth,A_ScreenHeight, 0xFEFE40, 0, Fast
     if !ErrorLevel
-        msgbox found image!
-
+        Mousemove recallX, recallY
 }
 
 FindPlayerXY(){
