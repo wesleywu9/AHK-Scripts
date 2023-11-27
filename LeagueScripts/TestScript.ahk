@@ -64,9 +64,12 @@ RunGame() {
 		} else {
 			; neither Ally nor Enemy present
 			Send {%RECALL%}
+			LevelUp(MAX_ORDER)
+			Sleep 7000
+			BuyRecommended()
+			Sleep 5000
 		}
 	}
-
 }
 
 RunTest() {
