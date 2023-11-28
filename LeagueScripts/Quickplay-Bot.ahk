@@ -46,11 +46,12 @@ RunGame() {
 
 	; check ally and enemy presence
 	Send {%ALLY_MAIN%}
+	Sleep 10
 	AllyPosXY := FindAllyXY()
 	if (AllyPosXY) {
 		if (EnemyPosXY := FindEnemyXY()) {
 			Send {%CENTER_CAMERA% down}
-			Sleep 30
+			Sleep 10
 			if (EnemyPosXY := FindEnemyXY()) {
 				EnemyDistance := GetDistance(SCREEN_CENTER, EnemyPosXY)
 				if (EnemyDistance < ACTIVE_RANGE) {

@@ -148,6 +148,7 @@ FollowAlly(ally, offset) {
     Mousemove SCREEN_CENTER[1], SCREEN_CENTER[2]
     Mousemove %randX%, %randY%, , R
     Click Right
+    Sleep 20
     Send {%ally% up}
 }
 
