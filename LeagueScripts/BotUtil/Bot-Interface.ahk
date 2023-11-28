@@ -32,26 +32,13 @@ RunGame() {
 		LevelUp(MAX_ORDER) 
 	}
 
-	; Check ally and enemy presence
-	Send {%ALLY_MAIN%}
-	AllyPosXY := FindAllyXY()
-	EnemyPosXY := FindEnemyXY()
-	if (AllyPosXY) {
-		if (EnemyPosXY) {
-			; Ally and Enemy present
-
-		} else {
-			; only Ally present
-			
-		}
-	} else {
-		if (EnemyPosXY) {
-			; only Enemy present
-
-		} else {
-			; neither Ally nor Enemy present
-			
-		}
+	; look for enemy
+	if (EnemyPosXY := FindEnemyXY()) { 
+		
+	} else if (AllyPosXY := FindAllyXY()) { ; look for ally
+		
+	} else { ; no enemy or ally
+		
 	}
 
 }
@@ -63,7 +50,11 @@ RunGame() {
 */
 
 RunTest() {
+	StartTime := A_TickCount
+
+
 	
+	;MsgBox % A_TickCount - StartTime " milliseconds have elapsed."
 }
 
 ;testing

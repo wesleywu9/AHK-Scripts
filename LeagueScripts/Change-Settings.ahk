@@ -6,7 +6,9 @@ defaultDict := controlDict.Clone()
 path := A_ScriptDir "\config.cfg"
 
 ;Notes
-Gui add, text,, Make sure camera lock is dead center. `nOptions > Game > Camera Lock Mode > Fixed Offset`n
+notes := "Make sure camera lock is dead center. `nOptions > Game > Camera Lock Mode > Fixed Offset`n`n"
+notes .= "Set Camera Move Speed (Keyboard) to 0. `nOptions > Game > Camera Move Speed (Keyboard)`n"
+Gui add, text,, %notes%
 
 ;Create GUI
 infile := FileOpen(path, "r")

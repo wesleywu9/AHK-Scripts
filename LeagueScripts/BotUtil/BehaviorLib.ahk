@@ -46,7 +46,7 @@ MousePercentMove(xPercent, yPercent) {
 
 /*
 -------------------------------
-            Ingame
+        Ingame Utility
 -------------------------------
 */
 
@@ -75,15 +75,15 @@ PanCameraToward(x, y) {
     Send {%yKey% up}
 }
 
-;follow ally based on SelectAlly key
-FollowAlly(ally, offset) {
-    Send {%ally%}
-    Random, randX, -offset, offset
-    Random, randY, -offset, offset
-    Mousemove SCREEN_CENTER[1], SCREEN_CENTER[2]
-    Mousemove %randX%, %randY%, , R
-    Click Right
+GetDistance(ByRef point1, ByRef point2) {
+    return Sqrt((point1[1] - point2[1])**2 + (point1[2] - point2[2])**2)
 }
+
+/*
+-------------------------------
+        Ingame Actions
+-------------------------------
+*/
 
 ;level all four abilities
 LevelUp(ByRef MAX_ORDER) {
@@ -140,7 +140,19 @@ BuyRecommended() {
     Sleep 500
 }
 
-;attack enemy based on cast order
+;follow ally based on SelectAlly key
+FollowAlly(ally, offset) {
+    Send {%ally% down}
+    Random, randX, -offset, offset
+    Random, randY, -offset, offset
+    Mousemove SCREEN_CENTER[1], SCREEN_CENTER[2]
+    Mousemove %randX%, %randY%, , R
+    Click Right
+    Send {%ally% up}
+}
+
+;attack enemy with specified cast order and items
+;requires enemypos
 AttackEnemy(ByRef CAST_ORDER) {
     Send {%ATTACK_MOVE%}
     loop % CAST_ORDER.Length() {
@@ -148,10 +160,47 @@ AttackEnemy(ByRef CAST_ORDER) {
         Mousemove EnemyPosXY[1], EnemyPosXY[2]
         ability := CAST_ORDER[A_Index]
         Send % ability
-        Sleep 50
+        Sleep 100
     }
     Loop % ITEM_SLOTS_ARR.Length() {
         SlotKey := ITEM_SLOTS_ARR[A_Index]
         Send {%SlotKey%}
     }
+}
+
+AttackMove(msDelay) {
+    Send {%ATTACK_MOVE%}
+    Sleep msDelay
+    Click Right
+    Sleep msDelay
+}
+;moves in opposite direction of enemy
+;requires enemypos
+Retreat(duration) {
+    Send {%CENTER_CAMERA% down}
+    EnemyPosXY := FindEnemyXY()
+    awayX := SCREEN_CENTER[1] + ((SCREEN_CENTER[1]-EnemyPosXY[1]) << 3)
+    awayY := SCREEN_CENTER[2] + ((SCREEN_CENTER[2]-EnemyPosXY[2]) << 3)
+    Mousemove awayX, awayY
+    Click down, Right
+    Sleep duration
+    Click up, Right
+    Send {%CENTER_CAMERA% up}
+}
+
+;attempts recall. breaks if enemy OR ally is present
+Recall() {
+    if (FindEnemyXY() || FindAllyXY()) {
+        return false
+    }
+    Send {%RECALL%}
+    startTime := A_TickCount
+    while (!FindEnemyXY() && !FindAllyXY()) {
+        if (A_TickCount-startTime > 9000) {
+            BuyRecommended()
+            LevelUp(MAX_ORDER)
+            return true
+        }
+    }
+    return false
 }

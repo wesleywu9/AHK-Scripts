@@ -12,10 +12,8 @@ LoadScript()
 ;Constants
 global MAX_ORDER := ["r", "q", "w", "e"]
 global CAST_ORDER := [SPELL_4, SPELL_3, SPELL_2, SPELL_1]
-global ACTIVE_RANGE := 650 ** 2 ;squared to shortcut calculations
-global DANGER_RANGE := 350 ** 2 ;squared to shortcut calculations
-global ALLY_MAIN := SELECT_ALLY_ARR[4] ;should be bot lane ally
-global loaded := false
+global ACTIVE_RANGE := 615
+global ALLY_MAIN := SELECT_ALLY_ARR[4] ;bot lane ally
 
 /*
 -------------------------------
@@ -24,9 +22,9 @@ global loaded := false
 */
 
 RunGame() {
-	if (!WinActive("League of Legends (TM) Client")) { ;Run client when not ingame
+	if (!WinActive(GAME_PROCESS)) { ;Run client when not ingame
 		RunClient()
-		loaded := false
+		static loaded := false
 		return
 	} else if (loaded == false) {
 		while(!FindPlayerXY()) {
@@ -46,43 +44,41 @@ RunGame() {
 		LevelUp(MAX_ORDER) 
 	}
 
-	;Combat
-	if (EnemyPosXY := FindEnemyXY()) {
-		;check enemy distance
-		Send {%CENTER_CAMERA% down}
-		Sleep 10
-		EnemyPosXY := FindEnemyXY()
-		if (EnemyPosXY) { 
-			EnemyDistance := (EnemyPosXY[2] - SCREEN_CENTER[2])**2 + (EnemyPosXY[1] - SCREEN_CENTER[1])**2
-			awayX := SCREEN_CENTER[1] + ((SCREEN_CENTER[1]-EnemyPosXY[1]) << 3)
-			awayY := SCREEN_CENTER[2] + ((SCREEN_CENTER[2]-EnemyPosXY[2]) << 3)
-			if (EnemyDistance < DANGER_RANGE) {
-				Mousemove awayX, awayY
-				Click Right
-				Send {%SUM_1%}{%SUM_2%}
-			} else if (EnemyDistance < ACTIVE_RANGE) {
-				AttackEnemy(CAST_ORDER)
-				Mousemove awayX, awayY
-				Click Right
-				Sleep 200
+	; check ally and enemy presence
+	Send {%ALLY_MAIN%}
+	AllyPosXY := FindAllyXY()
+	if (AllyPosXY) {
+		if (EnemyPosXY := FindEnemyXY()) {
+			Send {%CENTER_CAMERA% down}
+			Sleep 30
+			if (EnemyPosXY := FindEnemyXY()) {
+				EnemyDistance := GetDistance(SCREEN_CENTER, EnemyPosXY)
+				if (EnemyDistance < ACTIVE_RANGE) {
+					AttackEnemy(CAST_ORDER)
+					Retreat(200)
+					if (EnemyDistance < (ACTIVE_RANGE >> 1)) {
+						Retreat(2000)
+						Send {%SUM_1%}{%SUM_2%}
+					}
+				}
 			}
+			Send {%CENTER_CAMERA% up}
+			FollowAlly(ALLY_MAIN, 150)
+		} else {
+			FollowAlly(ALLY_MAIN, 300)
 		}
-		Send {%CENTER_CAMERA% up}
-	} else { ;follow bot lane ally when no enemy
-		FollowAlly(ALLY_MAIN)
-		MoveMouseRandom(SCREEN_CENTER[1], SCREEN_CENTER[2], 200)
+		AttackMove(400)
+	} else {
+		; play safe without ally, then recall
+		if (EnemyPosXY := FindEnemyXY()) {
+			Retreat(2000)
+		}
+		Recall()
 	}
-	;always auto+kite
-	MoveMouseRandom(SCREEN_CENTER[1], SCREEN_CENTER[2], 100)
-	Send {%ATTACK_MOVE%}
-	Sleep 400
-	Click Right
 }
 
 RunTest() {
 	StartTime := A_TickCount
-
-	BuyRecommended()
 
 	;MsgBox % A_TickCount - StartTime " milliseconds have elapsed."
 }

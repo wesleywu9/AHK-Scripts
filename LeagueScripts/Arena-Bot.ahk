@@ -31,11 +31,11 @@ RunGame() {
 
 	;Shop phase
 	if (ShopOpen()) {
-			Sleep 1000
-			Send {%SHOP%}
-			Sleep 1000
-			BuyRecommended()
-			LevelUp(MAX_ORDER) 
+		Sleep 1000
+		Send {%SHOP%}
+		Sleep 1000
+		BuyRecommended()
+		LevelUp(MAX_ORDER) 
 	}
 
 	;Combat
@@ -45,7 +45,7 @@ RunGame() {
 		Click Right
 		Send {%CENTER_CAMERA% down}
 		EnemyPosXY := FindEnemyXY()
-		EnemyDistance := (EnemyPosXY[2] - SCREEN_CENTER[2])**2 + (EnemyPosXY[1] - SCREEN_CENTER[1])**2
+		EnemyDistance := GetDistance(SCREEN_CENTER, EnemyPosXY)
 		;attack enemy when in range
 		if (EnemyDistance) {
 			if (EnemyDistance < ACTIVE_RANGE) {
@@ -55,11 +55,13 @@ RunGame() {
 			}
 		}
 		Send {%CENTER_CAMERA% up}
-	} else if (AllyPosXY := FindAllyXY()) { ;pan and move toward ally
+	} else if (AllyPosXY := FindAllyXY()) { 
+		;pan and move toward ally
 		PanCameraToward(AllyPosXY[1], AllyPosXY[2])
 		MoveMouseRandom(AllyPosXY[1], AllyPosXY[2], 200)
 		Click Right
-	} else { ;pan screen randomly
+	} else { 
+		;pan screen randomly
 		Random, RandKey, 1, SCROLL_CAM_ARR.Length()
 		Key := SCROLL_CAM_ARR[RandKey]
 		Send {%Key% down}

@@ -12,9 +12,8 @@ LoadScript()
 ;Constants
 global MAX_ORDER := ["r", "q", "w", "e"]
 global CAST_ORDER := [SPELL_4, SPELL_3, SPELL_2, SPELL_1]
-global ACTIVE_RANGE := 650 ** 2 ;squared to shortcut calculations
-global DANGER_RANGE := 350 ** 2 ;squared to shortcut calculations
-global ALLY_MAIN := SELECT_ALLY_ARR[4] ;should be bot lane ally
+global ACTIVE_RANGE := 615
+global ALLY_MAIN := SELECT_ALLY_ARR[4] ;bot lane ally
 
 /*
 -------------------------------
@@ -48,34 +47,38 @@ RunGame() {
 	; check ally and enemy presence
 	Send {%ALLY_MAIN%}
 	AllyPosXY := FindAllyXY()
-	EnemyPosXY := FindEnemyXY()
 	if (AllyPosXY) {
-		if (EnemyPosXY) {
-			; Ally and Enemy present
-
+		if (EnemyPosXY := FindEnemyXY()) {
+			Send {%CENTER_CAMERA% down}
+			Sleep 30
+			if (EnemyPosXY := FindEnemyXY()) {
+				EnemyDistance := GetDistance(SCREEN_CENTER, EnemyPosXY)
+				if (EnemyDistance < ACTIVE_RANGE) {
+					AttackEnemy(CAST_ORDER)
+					Retreat(200)
+					if (EnemyDistance < (ACTIVE_RANGE >> 1)) {
+						Retreat(2000)
+						Send {%SUM_1%}{%SUM_2%}
+					}
+				}
+			}
+			Send {%CENTER_CAMERA% up}
+			FollowAlly(ALLY_MAIN, 150)
 		} else {
-			; only Ally present
-			FollowAlly(ALLY_MAIN, 250)
+			FollowAlly(ALLY_MAIN, 300)
 		}
+		AttackMove(400)
 	} else {
-		if (EnemyPosXY) {
-			; only Enemy present
-
-		} else {
-			; neither Ally nor Enemy present
-			Send {%RECALL%}
-			LevelUp(MAX_ORDER)
-			Sleep 7000
-			BuyRecommended()
-			Sleep 5000
+		; play safe without ally, then recall
+		if (EnemyPosXY := FindEnemyXY()) {
+			Retreat(2000)
 		}
+		Recall()
 	}
 }
 
 RunTest() {
 	StartTime := A_TickCount
-
-	PrintKeys()
 
 	;MsgBox % A_TickCount - StartTime " milliseconds have elapsed."
 }
