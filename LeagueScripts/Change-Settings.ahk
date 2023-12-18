@@ -7,13 +7,12 @@ path := A_ScriptDir "\config.cfg"
 
 ;Notes
 notes := "Make sure camera lock is dead center. `nOptions > Game > Camera Lock Mode > Fixed Offset`n`n"
-notes .= "Set Camera Move Speed (Keyboard) to 0. `nOptions > Game > Camera Move Speed (Keyboard)`n"
 Gui add, text,, %notes%
 
 ;Create GUI
 infile := FileOpen(path, "r")
 for control, key in controlDict {
-    string := StrSplit(infile.ReadLine(), ":")[2]
+    string := StrSplit(infile.ReadLine(), "=")[2]
     string := StrSplit(string, "`n")[1]
     controlDict[control] := string
     Gui add, text, xm r1 w130, % control
@@ -42,7 +41,7 @@ infile.Write("")
 for control, key in controlDict {
     currentInput := "Edit" . A_Index
     currentInput := RTrim(%currentInput%, OmitChars = ["`r`n"," ", "`r", "`n"])
-    writeLine := Format("{1}:{2}", control, currentInput)
+    writeLine := Format("{1}={2}", control, currentInput)
     infile.WriteLine(writeLine)
 }
 infile.Close()

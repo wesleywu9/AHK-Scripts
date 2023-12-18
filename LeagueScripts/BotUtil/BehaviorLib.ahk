@@ -28,7 +28,7 @@ RunClient(champName := "") {
             Sleep 500
         }
     } else {
-        MousePercentMove(44,95)
+        MousePercentMove(45,95)
         Click left
         MousePercentMove(50,78)
         Click left

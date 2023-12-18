@@ -3,9 +3,7 @@ SetWorkingDir % A_ScriptDir "\resources"
 
 ;Functions
 TestImageFinder() {
-    PixelSearch, recallX, recallY, 0,0,A_ScreenWidth,A_ScreenHeight, 0xFEFE40, 0, Fast
-    if !ErrorLevel
-        Mousemove recallX, recallY
+    
 }
 
 FindPlayerXY(){
@@ -35,8 +33,10 @@ ShopOpen(){
 
 ExitArena(){
     ImageSearch, ExitArenaX, ExitArenaY, 0,0,A_ScreenWidth,A_ScreenHeight, *10 arena-exit.PNG
-    if !ErrorLevel
+    if !ErrorLevel {
         Click %ExitArenaX%, %ExitArenaY%
+        Sleep 15000
+    }
 }
 
 IsDead(){

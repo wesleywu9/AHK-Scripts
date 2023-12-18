@@ -1,4 +1,4 @@
-﻿#Include BotUtil\ImageFinder.ahk
+#Include BotUtil\ImageFinder.ahk
 #Include BotUtil\BehaviorLib.ahk
 #Include BotUtil\Settings.ahk
 
@@ -76,13 +76,7 @@ RunGame() {
 
 RunTest() {
 	
-	if (ShopOpen()) {
-		Sleep 1000
-		Send {%SHOP%}
-		Sleep 1000
-		BuyRecommended()
-		LevelUp(MAX_ORDER) 
-	}
+	BuyRecommended()
 
 }
 

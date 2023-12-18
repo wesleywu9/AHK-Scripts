@@ -31,29 +31,55 @@ global SUM_1
 global SUM_2
 
 LoadScript() {
-    ;A_ScriptDir MUST BE IN LEAGUE_SCRIPTS
+    ; A_ScriptDir MUST BE IN LEAGUE_SCRIPTS
     infile := FileOpen(A_ScriptDir "\config.cfg", "r")
-    keys := StrSplit(infile.read(), "`n")
+    if (!infile)
+    {
+        MsgBox, Error reading config file.
+        return
+    }
+    configFileContent := infile.read()
     infile.Close()
-
-    i := 1
-    ;Keys in lexical order
-    ATTACK_MOVE := StrSplit(keys[i++], ":")[2]
-    CENTER_CAMERA := StrSplit(keys[i++], ":")[2]
-    HOLD_TO_LEVEL := StrSplit(keys[i++], ":")[2]
-    ITEM_SLOTS_ARR := StrSplit(StrSplit(keys[i++], ":")[2], ",")
-    RECALL := StrSplit(keys[i++], ":")[2]
-    SCROLL_CAM_ARR := StrSplit(StrSplit(keys[i++], ":")[2], ",")
-    SELECT_ALLY_ARR := StrSplit(StrSplit(keys[i++], ":")[2], ",")
-    SHOP := StrSplit(keys[i++], ":")[2]
-    SPELL_1 := StrSplit(keys[i++], ":")[2]
-    SPELL_2 := StrSplit(keys[i++], ":")[2]
-    SPELL_3 := StrSplit(keys[i++], ":")[2]
-    SPELL_4 := StrSplit(keys[i++], ":")[2]
-    SUM_1 := StrSplit(keys[i++], ":")[2]
-    SUM_2 := StrSplit(keys[i++], ":")[2]
-
-    ;Metadata
+    ; Parsing the configuration file
+    lines := StrSplit(configFileContent, "`n", "`r")
+    for index, line in lines {
+        keyValue := StrSplit(line, "=")
+        if (keyValue.Length() >= 2) {
+            switch keyValue[1]
+            {
+                case "Attack Move":
+                    ATTACK_MOVE := keyValue[2]
+                case "Center camera":
+                    CENTER_CAMERA := keyValue[2]
+                case "Hold to Level":
+                    HOLD_TO_LEVEL := keyValue[2]
+                case "Item slots":
+                    ITEM_SLOTS_ARR := StrSplit(keyValue[2], ",")
+                case "Recall":
+                    RECALL := keyValue[2]
+                case "Scroll Camera":
+                    SCROLL_CAM_ARR := StrSplit(keyValue[2], ",")
+                case "Select Ally":
+                    SELECT_ALLY_ARR := StrSplit(keyValue[2], ",")
+                case "Shop":
+                    SHOP := keyValue[2]
+                case "Spell 1":
+                    SPELL_1 := keyValue[2]
+                case "Spell 2":
+                    SPELL_2 := keyValue[2]
+                case "Spell 3":
+                    SPELL_3 := keyValue[2]
+                case "Spell 4":
+                    SPELL_4 := keyValue[2]
+                case "Sum 1":
+                    SUM_1 := keyValue[2]
+                case "Sum 2":
+                    SUM_2 := keyValue[2]
+            }
+        }
+    }
+    
+    ; Metadata
     SCREEN_CENTER := [A_ScreenWidth/2, (A_ScreenHeight/2)-10]
     CLIENT_PROCESS := "ahk_exe LeagueClientUx.exe"
     GAME_PROCESS := "League of Legends (TM) Client"
@@ -61,13 +87,13 @@ LoadScript() {
 
 PrintKeys() {
     infile := FileOpen(A_ScriptDir "\config.cfg", "r")
-    keys := StrSplit(infile.read(), "`n")
+    if (!infile)
+    {
+        MsgBox, Error reading config file.
+        return
+    }
+    configFileContent := infile.read()
     infile.Close()
 
-    str := ""
-    loop % keys.Length() {
-        str .= keys[A_Index] . "`n"
-    }
-
-    msgbox % str
+    msgbox % configFileContent
 }

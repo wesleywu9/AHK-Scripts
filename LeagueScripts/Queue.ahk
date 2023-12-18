@@ -4,7 +4,7 @@
 
 loop {
 	if(WinExist("League of Legends (TM) Client")) {
-		exitapp
+		Sleep 10000
 	}
 	else {
 		AcceptQueue()

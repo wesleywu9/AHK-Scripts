@@ -35,9 +35,6 @@ RunGame() {
 		LevelUpSingle(MAX_ORDER[4])
 	}	
 
-	;Look for gameover
-	ExitArena()
-
 	;Shop phase
 	if (IsDead()) {
 		BuyRecommended()
@@ -80,6 +77,8 @@ RunGame() {
 
 RunTest() {
 	StartTime := A_TickCount
+
+	
 
 	;MsgBox % A_TickCount - StartTime " milliseconds have elapsed."
 }

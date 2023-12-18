@@ -20,7 +20,7 @@ return
 ;doujin
 4::
 scrollSpeed := 70
-scrollDuration := 7000
+scrollDuration := 8000
 readDuration := 1200
 loop {
 sleep readDuration

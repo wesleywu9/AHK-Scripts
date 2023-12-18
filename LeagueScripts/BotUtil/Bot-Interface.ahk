@@ -12,7 +12,7 @@ LoadScript()
 ;Constants
 global MAX_ORDER := []
 global CAST_ORDER := []
-global ACTIVE_RANGE := 0 ** 2 ;squared to shortcut calculations
+global ACTIVE_RANGE := 0
 
 /*
 -------------------------------
@@ -33,8 +33,16 @@ RunGame() {
 	}
 
 	; look for enemy
-	if (EnemyPosXY := FindEnemyXY()) { 
-		
+	if (EnemyPosXY := FindEnemyXY()) {
+		; check proximity
+		Send {%CENTER_CAMERA% down}
+		if (EnemyPosXY := FindEnemyXY()) {
+			EnemyDistance := GetDistance(SCREEN_CENTER, EnemyPosXY)
+			if (EnemyDistance < ACTIVE_RANGE) {
+				
+			}
+		}
+		Send {%CENTER_CAMERA% up} 
 	} else if (AllyPosXY := FindAllyXY()) { ; look for ally
 		
 	} else { ; no enemy or ally
