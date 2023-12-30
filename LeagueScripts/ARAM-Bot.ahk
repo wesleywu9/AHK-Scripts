@@ -78,7 +78,7 @@ RunTest() {
 }
 
 ;testing
-1::
+Ins::
 RunTest() 
 return
 

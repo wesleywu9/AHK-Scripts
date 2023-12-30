@@ -124,16 +124,17 @@ BuyList(ByRef ITEM_LIST) {
 BuyRecommended() {
     Send {%SHOP%}
     Sleep 500
-    ShopIcon := ShopOpen()
-    Mousemove ShopIcon[1], ShopIcon[2]
-    MouseRelativeMove(0, -5)
+    ShopFlag := ShopOpen()
+    Mousemove ShopFlag[1], ShopFlag[2]
+    Sleep 500
+    MouseRelativeMove(0, -62)
     Click left
     Sleep 500
-    Mousemove ShopIcon[1], ShopIcon[2]
-    MouseRelativeMove(14, 15)
+    Mousemove ShopFlag[1], ShopFlag[2]
+    MouseRelativeMove(12, -20)
     loop 5 {
         Click Right
-        Sleep 100
+        Sleep 200
     }
     Sleep 500
     Send {%SHOP%}
