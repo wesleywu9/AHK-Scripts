@@ -49,21 +49,21 @@ RunGame() {
 			if (EnemyDistance < ACTIVE_RANGE) {
 				AttackEnemy(CAST_ORDER)
 				MoveMouseRandom(SCREEN_CENTER[1], SCREEN_CENTER[2], 300)
-				AttackMove(400)
+				AttackMove(300)
 			}
 		}
 		Send {%CENTER_CAMERA% up}
 	} else if (AllyPosXY := FindAllyXY()) { 
 		;move toward ally
 		MoveMouseRandom(AllyPosXY[1], AllyPosXY[2], 300)
-		AttackMove(600)
+		AttackMove(500)
 		Send {%CENTER_CAMERA% down}
 		Send {%CENTER_CAMERA% up}
 	} else { 
 		;move randomly
 		Send {%CENTER_CAMERA% down}
 		MoveMouseRandom(SCREEN_CENTER[1], SCREEN_CENTER[2], 300)
-		AttackMove(600)
+		AttackMove(500)
 		Send {%CENTER_CAMERA% up}
 	}
 }
