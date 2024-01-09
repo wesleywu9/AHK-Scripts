@@ -22,9 +22,10 @@ global ALLY_MAIN := SELECT_ALLY_ARR[4] ;bot lane ally
 */
 
 RunGame() {
+	static loaded := false
 	if (!WinActive(GAME_PROCESS)) { ;Run client when not ingame
 		RunClient()
-		static loaded := false
+		
 		return
 	} else if (loaded == false) {
 		while(!FindPlayerXY()) {
@@ -41,7 +42,7 @@ RunGame() {
 		LevelUp(MAX_ORDER) 
 	}
 
-	; check ally and enemy presence
+	; Combat
 	Send {%ALLY_MAIN%}
 	Sleep 10
 	AllyPosXY := FindAllyXY()

@@ -88,12 +88,15 @@ GetDistance(ByRef point1, ByRef point2) {
 ;level all four abilities
 LevelUp(ByRef MAX_ORDER) {
     Send {%HOLD_TO_LEVEL% down}
+    Sleep 100
     Send % MAX_ORDER[1]
+    Sleep 100
     Send % MAX_ORDER[2]
+    Sleep 100
     Send % MAX_ORDER[3]
+    Sleep 100
     Send % MAX_ORDER[4]
     Send {%HOLD_TO_LEVEL% up}
-    Sleep 500
 }
 
 ;level the given ability

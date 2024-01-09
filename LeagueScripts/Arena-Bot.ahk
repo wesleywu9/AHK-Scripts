@@ -11,7 +11,7 @@
 LoadScript()
 ;Constants
 global MAX_ORDER := ["r", "q", "w", "e"]
-global CAST_ORDER := [SUM_1, SUM_2, SPELL_4, SPELL_3, SPELL_2, SPELL_1]
+global CAST_ORDER := [SPELL_4, SPELL_3, SPELL_2, SPELL_1]
 global ACTIVE_RANGE := 615
 
 /*
@@ -38,7 +38,7 @@ RunGame() {
 		LevelUp(MAX_ORDER) 
 	}
 
-	;Combat
+	; Combat
 	if (EnemyPosXY := FindEnemyXY()) { 
 		;move toward enemy if seen
 		Mousemove EnemyPosXY[1], EnemyPosXY[2]

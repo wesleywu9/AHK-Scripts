@@ -21,10 +21,17 @@ global ACTIVE_RANGE := 0
 */
 
 RunGame() {
+	static loaded := false
 	if (!WinActive(GAME_PROCESS)) { ;Run client when not ingame
-		RunClient("")
+		RunClient()
 		return
-	}
+	} else if (loaded == false) {
+		while(!FindPlayerXY()) {
+			Sleep 1000
+		}
+		loaded := True
+		
+	}	
 
 	; Shop/level
 	if () {
@@ -32,9 +39,8 @@ RunGame() {
 		LevelUp(MAX_ORDER) 
 	}
 
-	; look for enemy
+	; check proximity
 	if (EnemyPosXY := FindEnemyXY()) {
-		; check proximity
 		Send {%CENTER_CAMERA% down}
 		if (EnemyPosXY := FindEnemyXY()) {
 			EnemyDistance := GetDistance(SCREEN_CENTER, EnemyPosXY)

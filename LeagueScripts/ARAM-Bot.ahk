@@ -12,8 +12,7 @@ LoadScript()
 ;Constants
 global MAX_ORDER := ["r", "q", "w", "e"]
 global CAST_ORDER := [SPELL_4, SPELL_3, SPELL_2, SPELL_1, SUM_1, SUM_2]
-global ACTIVE_RANGE := 300 ** 2 ;squared to shortcut calculations
-global loaded := false
+global ACTIVE_RANGE := 615
 
 /*
 -------------------------------
@@ -22,9 +21,9 @@ global loaded := false
 */
 
 RunGame() {
+	static loaded := false
 	if (!WinActive(GAME_PROCESS)) { ;Run client when not ingame
 		RunClient()
-		loaded := false
 		return
 	} else if (loaded == false) {
 		while(!FindPlayerXY()) {
@@ -34,6 +33,9 @@ RunGame() {
 		BuyRecommended()
 		LevelUpSingle(MAX_ORDER[4])
 	}	
+	
+	;Look for surrender
+	Surrender()
 
 	;Shop phase
 	if (IsDead()) {
@@ -41,30 +43,50 @@ RunGame() {
 		LevelUp(MAX_ORDER) 
 	}
 
-	;Combat
-	if (EnemyPosXY := FindEnemyXY()) {
-		Mousemove EnemyPosXY[1], EnemyPosXY[2]
-		Click Right
-		Send {%CENTER_CAMERA% down}
-		EnemyPosXY := FindEnemyXY()
-		EnemyDistance := (EnemyPosXY[2] - SCREEN_CENTER[2])**2 + (EnemyPosXY[1] - SCREEN_CENTER[1])**2
-		;attack enemy when in range
-		if (EnemyDistance) {
-			if (EnemyDistance < ACTIVE_RANGE) {
-				AttackEnemy(CAST_ORDER)
-				MoveMouseRandom(SCREEN_CENTER[1], SCREEN_CENTER[2], 100)
-				Click Right
+	; Combat
+	static AllyCurrent := 0
+	; determine ally presence
+	Send {%AllyCurrent%}
+	Sleep 10
+	AllyPosXY := FindAllyXY()
+	if (AllyPosXY) {
+		; determine enemy presence
+		if (EnemyPosXY := FindEnemyXY()) {
+			; determine enemy proximity
+			Send {%CENTER_CAMERA% down}
+			Sleep 10
+			if (EnemyPosXY := FindEnemyXY()) {
+				EnemyDistance := GetDistance(SCREEN_CENTER, EnemyPosXY)
+				; attack if close, retreat if too close
+				if (EnemyDistance < ACTIVE_RANGE) {
+					AttackEnemy(CAST_ORDER)
+					Retreat(200)
+					if (EnemyDistance < (ACTIVE_RANGE >> 1)) {
+						Retreat(2000)
+						Send {%SUM_1%}{%SUM_2%}
+					}
+				}
 			}
+			Send {%CENTER_CAMERA% up}
+			FollowAlly(AllyCurrent, 150)
+		} else {
+			FollowAlly(AllyCurrent, 300)
 		}
-		Send {%CENTER_CAMERA% up}
-	} else { ;follow random ally
+		AttackMove(400)
+	} else { ; look for different ally
 		Random, num, 1, 4
-		randomAlly := SELECT_ALLY_ARR[num]
-		FollowAlly(randomAlly)
-		MoveMouseRandom(SCREEN_CENTER[1], SCREEN_CENTER[2], 100)
-		Click Right
-	} 
+		AllyCurrent := SELECT_ALLY_ARR[num]
+		FollowAlly(AllyCurrent, 300)
+	}
+}
 
+RunTest() {
+	StartTime := A_TickCount
+
+	AllyCurrent := SELECT_ALLY_ARR[1]
+	msgbox % AllyCurrent
+
+	;MsgBox % A_TickCount - StartTime " milliseconds have elapsed."
 }
 
 /*
@@ -72,10 +94,6 @@ RunGame() {
           Execution
 -------------------------------
 */
-
-RunTest() {
-	LevelUp(MAX_ORDER[4])
-}
 
 ;testing
 Ins::
