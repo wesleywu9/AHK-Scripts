@@ -136,8 +136,9 @@ BuyRecommended() {
     Mousemove ShopFlag[1], ShopFlag[2]
     MouseRelativeMove(12, -20)
     loop 5 {
-        Click Right
+        Click Right down
         Sleep 200
+        Click Right up
     }
     Sleep 500
     Send {%SHOP%}

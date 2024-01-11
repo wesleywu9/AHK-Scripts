@@ -83,8 +83,7 @@ RunGame() {
 RunTest() {
 	StartTime := A_TickCount
 
-	AllyCurrent := SELECT_ALLY_ARR[1]
-	msgbox % AllyCurrent
+	BuyRecommended()
 
 	;MsgBox % A_TickCount - StartTime " milliseconds have elapsed."
 }
